@@ -34,7 +34,11 @@ const getBackgroundStyles = (settings, defaultColor) => {
     return {
         backgroundColor: settings.backgroundType === 'solid' ? (settings.backgroundColor || defaultColor) : undefined,
         backgroundImage: settings.backgroundType === 'image' ? `url(${settings.backgroundImage})` :
-            settings.backgroundType === 'gradient' ? settings.backgroundGradient : undefined,
+            settings.backgroundType === 'gradient' ? (
+                settings.gradientColor1
+                    ? `linear-gradient(${settings.gradientDirection || '135deg'}, ${settings.gradientColor1} 0%, ${settings.gradientColor2 || settings.gradientColor1} 100%)`
+                    : settings.backgroundGradient
+            ) : undefined,
         backgroundSize: settings.backgroundSize || 'cover',
         backgroundPosition: settings.backgroundPosition || 'center',
         backgroundRepeat: 'no-repeat',
@@ -76,13 +80,13 @@ export const HeroBlock = ({ block, data, theme, isEditing }) => {
             <div className={`relative z-10 text-${settings.textAlign || 'center'} max-w-4xl mx-auto px-4`}>
                 {content.showSubtitle !== false && (
                     <p
-                        className="text-lg mb-4"
+                        className="text-lg mb-4 uppercase tracking-widest"
                         style={{
                             fontFamily: theme?.fonts?.accent || 'Dancing Script',
                             color: styles.subtitleColor || theme?.colors?.textLight
                         }}
                     >
-                        {data.hostName || content.subtitle || 'Welcome'}
+                        {content.subtitle || data.eventName || 'Wedding'}
                     </p>
                 )}
                 <h1
@@ -92,7 +96,7 @@ export const HeroBlock = ({ block, data, theme, isEditing }) => {
                         color: styles.titleColor || theme?.colors?.text
                     }}
                 >
-                    {data.eventName || content.title || 'Beautiful Celebration'}
+                    {content.title || data.hostName || 'John & Jane'}
                 </h1>
                 {content.showDate !== false && data.eventDate && (
                     <p
@@ -162,7 +166,7 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
                             <div className="text-4xl mb-4">📅</div>
                             <h3 className="font-semibold text-lg mb-2" style={{ color: theme?.colors?.text }}>Date</h3>
                             <p style={{ color: theme?.colors?.textLight }}>
-                                {data.eventDate ? new Date(data.eventDate).toLocaleDateString('en-US', {
+                                {(content.date || data.eventDate) ? new Date(content.date || data.eventDate).toLocaleDateString('en-US', {
                                     month: 'long',
                                     day: 'numeric',
                                     year: 'numeric'
@@ -176,7 +180,7 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
                             <div className="text-4xl mb-4">🕐</div>
                             <h3 className="font-semibold text-lg mb-2" style={{ color: theme?.colors?.text }}>Time</h3>
                             <p style={{ color: theme?.colors?.textLight }}>
-                                {data.eventTime || 'TBD'}
+                                {content.time || data.eventTime || 'TBD'}
                             </p>
                         </div>
                     )}
@@ -186,7 +190,7 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
                             <div className="text-4xl mb-4">📍</div>
                             <h3 className="font-semibold text-lg mb-2" style={{ color: theme?.colors?.text }}>Venue</h3>
                             <p style={{ color: theme?.colors?.textLight }}>
-                                {data.venue || 'TBD'}
+                                {content.venue || data.venue || 'TBD'}
                             </p>
                         </div>
                     )}
@@ -219,10 +223,10 @@ export const VenueBlock = ({ block, data, theme }) => {
                     {content.title || 'Venue'}
                 </h2>
                 <p className="text-xl mb-2" style={{ color: theme?.colors?.text }}>
-                    {data.venue || 'Venue Name'}
+                    {content.venueName || data.venue || 'Venue Name'}
                 </p>
                 <p className="text-lg mb-8" style={{ color: theme?.colors?.textLight }}>
-                    {data.venueAddress || 'Venue Address'}
+                    {content.venueAddress || data.venueAddress || 'Venue Address'}
                 </p>
 
                 {content.showMap && data.googleMapsLink && (
@@ -265,7 +269,32 @@ export const GalleryBlock = ({ block, data, theme }) => {
     const variants = getAnimationVariants(settings.animation);
     const bgStyle = getBackgroundStyles(settings, theme?.colors?.surface);
 
-    if (images.length === 0) return null;
+    if (images.length === 0) {
+        return (
+            <motion.section
+                className="py-16 md:py-24"
+                style={bgStyle}
+                initial={variants.initial}
+                whileInView={variants.animate}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+            >
+                <div className="max-w-6xl mx-auto px-4 text-center">
+                    <h2
+                        className="text-3xl md:text-4xl font-bold mb-6"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title || 'Gallery'}
+                    </h2>
+                    <div className="border-2 border-dashed rounded-xl p-12" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            📷 Add images using the editor panel
+                        </p>
+                    </div>
+                </div>
+            </motion.section>
+        );
+    }
 
     return (
         <motion.section
@@ -392,7 +421,7 @@ export const MessageBlock = ({ block, data, theme }) => {
                         color: theme?.colors?.textLight
                     }}
                 >
-                    {data.message || content.text || 'Your message here...'}
+                    {content.text || data.message || 'Your message here...'}
                 </p>
             </div>
         </motion.section>
@@ -438,26 +467,26 @@ export const FooterBlock = ({ block, data, theme }) => {
 export const DividerBlock = ({ block, theme }) => {
     const { settings = {}, content = {} } = block;
     const bgStyle = getBackgroundStyles(settings, 'transparent');
+    const dividerColor = content.color || theme?.colors?.border || '#e5e7eb';
+    const thickness = content.thickness || '1px';
 
     return (
-        <div
-            className="py-8"
-            style={bgStyle}
-        >
+        <div className="py-8" style={bgStyle}>
             <div className="max-w-4xl mx-auto px-4 flex items-center justify-center">
                 {content.style === 'ornament' ? (
-                    <div className="text-4xl">✦ ✦ ✦</div>
+                    <div className="text-4xl" style={{ color: dividerColor }}>✦ ✦ ✦</div>
                 ) : content.style === 'dots' ? (
                     <div className="flex gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: theme?.colors?.primary }} />
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: theme?.colors?.primary }} />
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: theme?.colors?.primary }} />
+                        {[0, 1, 2].map(i => (
+                            <div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: theme?.colors?.primary }} />
+                        ))}
                     </div>
+                ) : content.style === 'wave' ? (
+                    <svg width="120" height="20" viewBox="0 0 120 20" fill="none">
+                        <path d="M0 10 C20 0, 40 20, 60 10 S100 0, 120 10" stroke={dividerColor} strokeWidth={thickness.replace('px', '')} fill="none" />
+                    </svg>
                 ) : (
-                    <div
-                        className="w-24 h-0.5"
-                        style={{ backgroundColor: theme?.colors?.border }}
-                    />
+                    <div className="w-24" style={{ height: thickness, backgroundColor: dividerColor }} />
                 )}
             </div>
         </div>
@@ -469,8 +498,8 @@ export const CountdownBlock = ({ block, data, theme }) => {
     const { settings = {}, content = {} } = block;
     const variants = getAnimationVariants(settings.animation);
     const bgStyle = getBackgroundStyles(settings, theme?.colors?.surface);
+    const style = content.style || 'minimal';
 
-    // Calculate time remaining
     const eventDate = new Date(data.eventDate);
     const now = new Date();
     const diff = eventDate - now;
@@ -478,6 +507,12 @@ export const CountdownBlock = ({ block, data, theme }) => {
     const days = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
     const hours = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
     const minutes = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+
+    const itemStyle = style === 'boxed'
+        ? 'p-6 rounded-xl min-w-[120px] border-2'
+        : style === 'flip'
+            ? 'p-4 rounded-lg min-w-[100px] shadow-lg'
+            : 'p-4 rounded-xl min-w-[100px]';
 
     return (
         <motion.section
@@ -503,19 +538,229 @@ export const CountdownBlock = ({ block, data, theme }) => {
                     ].map((item) => (
                         <div
                             key={item.label}
-                            className="p-4 rounded-xl min-w-[100px]"
-                            style={{ backgroundColor: theme?.colors?.background }}
+                            className={itemStyle}
+                            style={{
+                                backgroundColor: theme?.colors?.background,
+                                borderColor: style === 'boxed' ? theme?.colors?.primary : undefined,
+                            }}
                         >
-                            <div
-                                className="text-4xl font-bold"
-                                style={{ color: theme?.colors?.primary }}
-                            >
+                            <div className="text-4xl font-bold" style={{ color: theme?.colors?.primary }}>
                                 {item.value}
                             </div>
                             <div style={{ color: theme?.colors?.textLight }}>{item.label}</div>
                         </div>
                     ))}
                 </div>
+            </div>
+        </motion.section>
+    );
+};
+
+// QR Code Block  
+export const QRCodeBlock = ({ block, data, theme }) => {
+    const { settings = {}, content = {} } = block;
+    const variants = getAnimationVariants(settings.animation);
+    const bgStyle = getBackgroundStyles(settings, theme?.colors?.background);
+    const size = content.size || 200;
+
+    // Simple QR code placeholder using a styled div
+    // In production, use a QR library like 'qrcode.react'
+    const qrUrl = data.shareUrl || (data.slug
+        ? `${window.location.origin}/invite/${data.slug}`
+        : window.location.href);
+
+    return (
+        <motion.section
+            className="py-16"
+            style={bgStyle}
+            initial={variants.initial}
+            whileInView={variants.animate}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+        >
+            <div className="max-w-4xl mx-auto px-4 text-center">
+                <h2
+                    className="text-2xl font-bold mb-6"
+                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                >
+                    {content.title || 'Scan to View'}
+                </h2>
+                <div className="inline-flex flex-col items-center gap-4">
+                    <div
+                        className="bg-white p-4 rounded-xl shadow-md border flex items-center justify-center"
+                        style={{ width: size + 32, height: size + 32 }}
+                    >
+                        {/* Real QR Code via API */}
+                        <img
+                            src={`https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(qrUrl)}`}
+                            alt="QR Code"
+                            width={size}
+                            height={size}
+                            className="rounded"
+                            style={{ imageRendering: 'pixelated' }}
+                        />
+                    </div>
+                    {content.includeLabel && (
+                        <p className="text-sm" style={{ color: theme?.colors?.textLight }}>
+                            Scan with your phone camera
+                        </p>
+                    )}
+                </div>
+            </div>
+        </motion.section>
+    );
+};
+
+// Social Share Block
+export const SocialShareBlock = ({ block, data, theme }) => {
+    const { settings = {}, content = {} } = block;
+    const variants = getAnimationVariants(settings.animation);
+    const bgStyle = getBackgroundStyles(settings, theme?.colors?.surface);
+
+    const shareUrl = data.shareUrl || window.location.href;
+    const shareText = `You're invited to ${data.eventName || 'an event'}!`;
+
+    const shareLinks = [
+        content.whatsapp !== false && {
+            label: 'WhatsApp',
+            color: '#25D366',
+            url: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
+            icon: '💬',
+        },
+        content.facebook !== false && {
+            label: 'Facebook',
+            color: '#1877F2',
+            url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+            icon: '📘',
+        },
+        content.twitter !== false && {
+            label: 'Twitter',
+            color: '#1DA1F2',
+            url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+            icon: '🐦',
+        },
+    ].filter(Boolean);
+
+    const handleCopyLink = () => {
+        navigator.clipboard?.writeText(shareUrl);
+    };
+
+    return (
+        <motion.section
+            className="py-12"
+            style={bgStyle}
+            initial={variants.initial}
+            whileInView={variants.animate}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+        >
+            <div className="max-w-4xl mx-auto px-4 text-center">
+                <h2
+                    className="text-2xl font-bold mb-6"
+                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                >
+                    {content.title || 'Share This Invitation'}
+                </h2>
+                <div className="flex justify-center gap-4 flex-wrap">
+                    {shareLinks.map((link) => (
+                        <a
+                            key={link.label}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-full text-white font-medium text-sm transition-transform hover:scale-105"
+                            style={{ backgroundColor: link.color }}
+                        >
+                            <span>{link.icon}</span>
+                            {link.label}
+                        </a>
+                    ))}
+                    {content.copyLink !== false && (
+                        <button
+                            onClick={handleCopyLink}
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-medium text-sm border-2 transition-transform hover:scale-105"
+                            style={{ borderColor: theme?.colors?.primary, color: theme?.colors?.primary }}
+                        >
+                            📋 Copy Link
+                        </button>
+                    )}
+                </div>
+            </div>
+        </motion.section>
+    );
+};
+
+// YouTube Embed Block
+export const YouTubeBlock = ({ block, data, theme }) => {
+    const { settings = {}, content = {} } = block;
+    const variants = getAnimationVariants(settings.animation);
+    const bgStyle = getBackgroundStyles(settings, theme?.colors?.background);
+
+    // Extract YouTube video ID from various URL formats
+    const getYouTubeId = (url) => {
+        if (!url) return null;
+        const patterns = [
+            /(?:youtube\.com\/watch\?v=)([\w-]+)/,
+            /(?:youtu\.be\/)([\w-]+)/,
+            /(?:youtube\.com\/embed\/)([\w-]+)/,
+            /(?:youtube\.com\/shorts\/)([\w-]+)/,
+        ];
+        for (const pattern of patterns) {
+            const match = url.match(pattern);
+            if (match) return match[1];
+        }
+        return null;
+    };
+
+    const videoId = getYouTubeId(content.videoUrl);
+
+    return (
+        <motion.section
+            className="py-16 md:py-24"
+            style={bgStyle}
+            initial={variants.initial}
+            whileInView={variants.animate}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+        >
+            <div className="max-w-4xl mx-auto px-4">
+                {content.title && (
+                    <h2
+                        className="text-3xl md:text-4xl font-bold mb-8 text-center"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title}
+                    </h2>
+                )}
+                {videoId ? (
+                    <div
+                        className="relative rounded-2xl overflow-hidden shadow-lg"
+                        style={{ paddingBottom: content.aspectRatio === '1:1' ? '100%' : content.aspectRatio === '4:3' ? '75%' : '56.25%', height: 0 }}
+                    >
+                        <iframe
+                            src={`https://www.youtube.com/embed/${videoId}?rel=0${content.autoplay ? '&autoplay=1&mute=1' : ''}`}
+                            title={content.title || 'Video'}
+                            className="absolute inset-0 w-full h-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            style={{ border: 0 }}
+                        />
+                    </div>
+                ) : (
+                    <div className="border-2 border-dashed rounded-2xl p-12 text-center" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            🎬 Paste a YouTube URL in the editor panel
+                        </p>
+                    </div>
+                )}
+                {content.caption && (
+                    <p
+                        className="mt-4 text-center text-sm"
+                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
+                    >
+                        {content.caption}
+                    </p>
+                )}
             </div>
         </motion.section>
     );
@@ -531,4 +776,7 @@ export default {
     FooterBlock,
     DividerBlock,
     CountdownBlock,
+    QRCodeBlock,
+    SocialShareBlock,
+    YouTubeBlock,
 };

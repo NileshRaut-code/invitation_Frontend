@@ -84,9 +84,10 @@ const PublicInvitation = () => {
         >
             <BlocksRenderer
                 blocks={design.blocks || []}
-                data={invitation.content}
+                data={{ ...invitation.content, slug: invitation.slug }}
                 theme={theme}
                 onRSVP={() => setIsRSVPModalOpen(true)}
+                invitationId={invitation._id}
             />
 
             <RSVPModal

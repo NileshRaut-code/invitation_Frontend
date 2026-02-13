@@ -13,6 +13,7 @@ import AdminRoute from './components/AdminRoute';
 import Home from './pages/Home';
 import Categories from './pages/Categories';
 import Templates from './pages/Templates';
+import Pricing from './pages/Pricing';
 import PublicInvitation from './pages/PublicInvitation';
 
 // Auth Pages
@@ -48,6 +49,7 @@ const App = () => {
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:categorySlug" element={<Templates />} />
           <Route path="/templates" element={<Templates />} />
+          <Route path="/pricing" element={<Pricing />} />
         </Route>
 
         {/* Public Invitation View */}

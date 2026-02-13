@@ -8,6 +8,9 @@ import {
     FooterBlock,
     DividerBlock,
     CountdownBlock,
+    QRCodeBlock,
+    SocialShareBlock,
+    YouTubeBlock,
 } from './index';
 
 // Map block types to components
@@ -21,6 +24,9 @@ const blockComponents = {
     footer: FooterBlock,
     divider: DividerBlock,
     countdown: CountdownBlock,
+    qrcode: QRCodeBlock,
+    socialShare: SocialShareBlock,
+    youtube: YouTubeBlock,
 };
 
 /**

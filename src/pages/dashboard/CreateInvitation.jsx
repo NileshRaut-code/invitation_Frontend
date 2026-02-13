@@ -38,7 +38,9 @@ const CreateInvitation = () => {
         hostContact: '',
         message: '',
         rsvpDeadline: '',
+        googleMapsLink: '',
     });
+    const [fieldErrors, setFieldErrors] = useState({});
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -118,8 +120,23 @@ const CreateInvitation = () => {
         }
 
         if (currentStep === 2) {
-            if (!formData.eventName || !formData.eventDate || !formData.venue) {
-                toast.error('Please fill in required fields (Event Name, Date, Venue)');
+            // Field-level validation
+            const errors = {};
+            if (!formData.eventName.trim()) errors.eventName = 'Event name is required';
+            if (!formData.eventDate) errors.eventDate = 'Event date is required';
+            if (!formData.venue.trim()) errors.venue = 'Venue name is required';
+            if (formData.rsvpDeadline && formData.eventDate && new Date(formData.rsvpDeadline) > new Date(formData.eventDate)) {
+                errors.rsvpDeadline = 'RSVP deadline must be before event date';
+            }
+            if (formData.eventDate && new Date(formData.eventDate) < new Date(new Date().toDateString())) {
+                errors.eventDate = 'Event date must be in the future';
+            }
+            if (formData.googleMapsLink && !formData.googleMapsLink.startsWith('http')) {
+                errors.googleMapsLink = 'Please enter a valid URL starting with http';
+            }
+            setFieldErrors(errors);
+            if (Object.keys(errors).length > 0) {
+                toast.error('Please fix the highlighted errors');
                 return;
             }
 
@@ -152,7 +169,7 @@ const CreateInvitation = () => {
             const payload = {
                 content: {
                     ...formData,
-                    googleMapsLink: formData.venueAddress ? `https://maps.google.com/?q=${encodeURIComponent(formData.venueAddress)}` : '',
+                    googleMapsLink: formData.googleMapsLink || (formData.venueAddress ? `https://maps.google.com/?q=${encodeURIComponent(formData.venueAddress)}` : ''),
                 },
                 design: design
             };
@@ -192,6 +209,13 @@ const CreateInvitation = () => {
                     formData,
                     design: initialDesign
                 }}
+                planType={
+                    creationMethod === 'scratch'
+                        ? 'scratch'
+                        : selectedTemplate?.isPremium
+                            ? 'paid'
+                            : 'free'
+                }
                 onSave={handleCustomDesignSave}
                 onCancel={() => setIsBuilderOpen(false)}
             />
@@ -361,13 +385,16 @@ const CreateInvitation = () => {
                         <h2 className="text-xl font-bold text-gray-900 mb-6">Event Details</h2>
                         <Card className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Input
-                                    label="Event Name *"
-                                    name="eventName"
-                                    value={formData.eventName}
-                                    onChange={handleInputChange}
-                                    placeholder="e.g., Wedding Ceremony"
-                                />
+                                <div>
+                                    <Input
+                                        label="Event Name *"
+                                        name="eventName"
+                                        value={formData.eventName}
+                                        onChange={handleInputChange}
+                                        placeholder="e.g., Wedding Ceremony"
+                                    />
+                                    {fieldErrors.eventName && <p className="text-red-500 text-xs mt-1">{fieldErrors.eventName}</p>}
+                                </div>
                                 <Input
                                     label="Host Name"
                                     name="hostName"
@@ -375,13 +402,16 @@ const CreateInvitation = () => {
                                     onChange={handleInputChange}
                                     placeholder="e.g., John & Jane"
                                 />
-                                <Input
-                                    label="Event Date *"
-                                    name="eventDate"
-                                    type="date"
-                                    value={formData.eventDate}
-                                    onChange={handleInputChange}
-                                />
+                                <div>
+                                    <Input
+                                        label="Event Date *"
+                                        name="eventDate"
+                                        type="date"
+                                        value={formData.eventDate}
+                                        onChange={handleInputChange}
+                                    />
+                                    {fieldErrors.eventDate && <p className="text-red-500 text-xs mt-1">{fieldErrors.eventDate}</p>}
+                                </div>
                                 <Input
                                     label="Event Time"
                                     name="eventTime"
@@ -389,13 +419,16 @@ const CreateInvitation = () => {
                                     value={formData.eventTime}
                                     onChange={handleInputChange}
                                 />
-                                <Input
-                                    label="Venue Name *"
-                                    name="venue"
-                                    value={formData.venue}
-                                    onChange={handleInputChange}
-                                    placeholder="e.g., Grand Ballroom"
-                                />
+                                <div>
+                                    <Input
+                                        label="Venue Name *"
+                                        name="venue"
+                                        value={formData.venue}
+                                        onChange={handleInputChange}
+                                        placeholder="e.g., Grand Ballroom"
+                                    />
+                                    {fieldErrors.venue && <p className="text-red-500 text-xs mt-1">{fieldErrors.venue}</p>}
+                                </div>
                                 <Input
                                     label="Venue Address"
                                     name="venueAddress"
@@ -403,6 +436,16 @@ const CreateInvitation = () => {
                                     onChange={handleInputChange}
                                     placeholder="Full address"
                                 />
+                                <div className="md:col-span-2">
+                                    <Input
+                                        label="Google Maps Link"
+                                        name="googleMapsLink"
+                                        value={formData.googleMapsLink}
+                                        onChange={handleInputChange}
+                                        placeholder="https://maps.google.com/... (optional, auto-generated from address if empty)"
+                                    />
+                                    {fieldErrors.googleMapsLink && <p className="text-red-500 text-xs mt-1">{fieldErrors.googleMapsLink}</p>}
+                                </div>
                                 <Input
                                     label="Contact Number"
                                     name="hostContact"
@@ -410,13 +453,16 @@ const CreateInvitation = () => {
                                     onChange={handleInputChange}
                                     placeholder="+91 9876543210"
                                 />
-                                <Input
-                                    label="RSVP Deadline"
-                                    name="rsvpDeadline"
-                                    type="date"
-                                    value={formData.rsvpDeadline}
-                                    onChange={handleInputChange}
-                                />
+                                <div>
+                                    <Input
+                                        label="RSVP Deadline"
+                                        name="rsvpDeadline"
+                                        type="date"
+                                        value={formData.rsvpDeadline}
+                                        onChange={handleInputChange}
+                                    />
+                                    {fieldErrors.rsvpDeadline && <p className="text-red-500 text-xs mt-1">{fieldErrors.rsvpDeadline}</p>}
+                                </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                         Personal Message
