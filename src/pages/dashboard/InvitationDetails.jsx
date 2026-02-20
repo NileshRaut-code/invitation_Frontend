@@ -154,6 +154,16 @@ const InvitationDetails = () => {
         toast.success('QR code download started!');
     };
 
+    const toggleStatus = async () => {
+        try {
+            const { data } = await api.put(`/invitations/${id}/status`);
+            setInvitation(data);
+            toast.success(`Status updated to ${data.status}`);
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to update status');
+        }
+    };
+
     const exportRSVPs = () => {
         if (rsvps.length === 0) { toast.info('No RSVPs to export'); return; }
         const headers = ['Name', 'Email', 'Phone', 'Response', 'Guests', 'Message', 'Date'];
@@ -220,13 +230,26 @@ const InvitationDetails = () => {
                         <p className="text-gray-600 mt-1">Manage your invitation and track RSVPs</p>
                     </div>
                     <div className="flex gap-2 flex-wrap">
+                        {invitation.isPaid && (
+                            <Button
+                                variant={invitation.status === 'published' ? 'secondary' : 'default'}
+                                onClick={toggleStatus}
+                                className="flex items-center"
+                            >
+                                {invitation.status === 'published' ? (
+                                    <><ToggleRight size={18} className="mr-2 text-green-500" /> Published</>
+                                ) : (
+                                    <><ToggleLeft size={18} className="mr-2 text-gray-500" /> Draft</>
+                                )}
+                            </Button>
+                        )}
                         <Button variant="outline" onClick={copyLink}>
                             <Copy size={18} className="mr-2" /> Copy Link
                         </Button>
                         <Button variant="outline" onClick={() => navigate(`/dashboard/edit/${id}`)}>
                             <Edit3 size={18} className="mr-2" /> Edit Design
                         </Button>
-                        {invitation.isPaid && (
+                        {invitation.isPaid && invitation.status === 'published' && (
                             <a href={`/invite/${invitation.slug}`} target="_blank" rel="noopener noreferrer">
                                 <Button><ExternalLink size={18} className="mr-2" /> View Live</Button>
                             </a>
