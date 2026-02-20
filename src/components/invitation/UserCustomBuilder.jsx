@@ -811,15 +811,21 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <label className="text-sm block mb-1">Alt Text</label>
                                 <input type="text" value={selectedBlock.content?.altText || ''} onChange={(e) => updateBlockContent('altText', e.target.value)} placeholder="Describe the image" className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
-                            <div>
-                                <label className="text-sm block mb-1">Max Height</label>
-                                <select value={selectedBlock.content?.maxHeight || '800px'} onChange={(e) => updateBlockContent('maxHeight', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <option value="400px">Small (400px)</option>
-                                    <option value="600px">Medium (600px)</option>
-                                    <option value="800px">Large (800px)</option>
-                                    <option value="none">Full Size</option>
-                                </select>
+                            <div className="flex items-center gap-2">
+                                <input type="checkbox" checked={selectedBlock.content?.fitScreen !== false} onChange={(e) => updateBlockContent('fitScreen', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
+                                <label className="text-sm">Fit to Screen (fills device viewport)</label>
                             </div>
+                            {selectedBlock.content?.fitScreen === false && (
+                                <div>
+                                    <label className="text-sm block mb-1">Max Height</label>
+                                    <select value={selectedBlock.content?.maxHeight || '800px'} onChange={(e) => updateBlockContent('maxHeight', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                        <option value="400px">Small (400px)</option>
+                                        <option value="600px">Medium (600px)</option>
+                                        <option value="800px">Large (800px)</option>
+                                        <option value="none">Full Size</option>
+                                    </select>
+                                </div>
+                            )}
                             <div>
                                 <label className="text-sm block mb-1">Fit</label>
                                 <select value={selectedBlock.content?.objectFit || 'contain'} onChange={(e) => updateBlockContent('objectFit', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
@@ -846,15 +852,21 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <label className="text-sm block mb-1">Caption (optional)</label>
                                 <input type="text" value={selectedBlock.content?.caption || ''} onChange={(e) => updateBlockContent('caption', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
-                            <div>
-                                <label className="text-sm block mb-1">Viewer Height</label>
-                                <select value={selectedBlock.content?.height || '600px'} onChange={(e) => updateBlockContent('height', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
-                                    <option value="400px">Small (400px)</option>
-                                    <option value="600px">Medium (600px)</option>
-                                    <option value="800px">Large (800px)</option>
-                                    <option value="1000px">Extra Large (1000px)</option>
-                                </select>
+                            <div className="flex items-center gap-2">
+                                <input type="checkbox" checked={selectedBlock.content?.fitScreen !== false} onChange={(e) => updateBlockContent('fitScreen', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
+                                <label className="text-sm">Fit to Screen (fills device viewport)</label>
                             </div>
+                            {selectedBlock.content?.fitScreen === false && (
+                                <div>
+                                    <label className="text-sm block mb-1">Viewer Height</label>
+                                    <select value={selectedBlock.content?.height || '600px'} onChange={(e) => updateBlockContent('height', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                        <option value="400px">Small (400px)</option>
+                                        <option value="600px">Medium (600px)</option>
+                                        <option value="800px">Large (800px)</option>
+                                        <option value="1000px">Extra Large (1000px)</option>
+                                    </select>
+                                </div>
+                            )}
                         </>
                     )}
                 </div>

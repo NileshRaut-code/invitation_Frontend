@@ -877,50 +877,51 @@ export const FullImageBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-8 md:py-12"
-            style={bgStyle}
+            className="relative flex flex-col items-center justify-center"
+            style={{
+                ...bgStyle,
+                minHeight: content.fitScreen !== false ? '100dvh' : 'auto',
+                padding: 0,
+            }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-5xl mx-auto px-4">
-                {content.title && (
-                    <h2
-                        className="text-3xl md:text-4xl font-bold mb-6 text-center"
-                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
-                    >
-                        {content.title}
-                    </h2>
-                )}
-                {content.imageUrl ? (
-                    <div className="rounded-2xl overflow-hidden shadow-lg">
-                        <img
-                            src={content.imageUrl}
-                            alt={content.altText || content.title || 'Invitation Image'}
-                            className="w-full object-contain"
-                            style={{
-                                maxHeight: content.maxHeight || '800px',
-                                objectFit: content.objectFit || 'contain',
-                            }}
-                        />
-                    </div>
-                ) : (
-                    <div className="border-2 border-dashed rounded-2xl p-16 text-center" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
-                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
-                            🖼️ Paste an image URL in the editor panel
-                        </p>
-                    </div>
-                )}
-                {content.caption && (
-                    <p
-                        className="mt-4 text-center text-sm"
-                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
-                    >
-                        {content.caption}
+            {content.title && (
+                <h2
+                    className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-2xl md:text-3xl font-bold text-center px-4"
+                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                >
+                    {content.title}
+                </h2>
+            )}
+            {content.imageUrl ? (
+                <img
+                    src={content.imageUrl}
+                    alt={content.altText || content.title || 'Invitation Image'}
+                    className="w-full h-full"
+                    style={{
+                        objectFit: content.objectFit || 'contain',
+                        minHeight: content.fitScreen !== false ? '100dvh' : undefined,
+                        maxHeight: content.fitScreen !== false ? '100dvh' : (content.maxHeight || '800px'),
+                    }}
+                />
+            ) : (
+                <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                    <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                        🖼️ Paste an image URL in the editor panel
                     </p>
-                )}
-            </div>
+                </div>
+            )}
+            {content.caption && (
+                <p
+                    className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center text-sm px-4 py-2 rounded-full"
+                    style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body, backgroundColor: 'rgba(255,255,255,0.8)' }}
+                >
+                    {content.caption}
+                </p>
+            )}
         </motion.section>
     );
 };
@@ -933,48 +934,51 @@ export const PDFBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-12 md:py-16"
-            style={bgStyle}
+            className="relative flex flex-col"
+            style={{
+                ...bgStyle,
+                minHeight: content.fitScreen !== false ? '100dvh' : 'auto',
+                padding: 0,
+            }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4">
-                {content.title && (
-                    <h2
-                        className="text-3xl md:text-4xl font-bold mb-6 text-center"
-                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
-                    >
-                        {content.title}
-                    </h2>
-                )}
-                {content.pdfUrl ? (
-                    <div className="rounded-2xl overflow-hidden shadow-lg border" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
-                        <iframe
-                            src={content.pdfUrl}
-                            title={content.title || 'PDF Document'}
-                            width="100%"
-                            style={{ height: content.height || '600px', border: 0 }}
-                            loading="lazy"
-                        />
-                    </div>
-                ) : (
-                    <div className="border-2 border-dashed rounded-2xl p-16 text-center" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
-                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
-                            📄 Paste a PDF URL in the editor panel
-                        </p>
-                    </div>
-                )}
-                {content.caption && (
-                    <p
-                        className="mt-4 text-center text-sm"
-                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
-                    >
-                        {content.caption}
+            {content.title && (
+                <h2
+                    className="text-2xl md:text-3xl font-bold py-4 text-center"
+                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                >
+                    {content.title}
+                </h2>
+            )}
+            {content.pdfUrl ? (
+                <iframe
+                    src={content.pdfUrl}
+                    title={content.title || 'PDF Document'}
+                    className="w-full flex-1"
+                    style={{
+                        minHeight: content.fitScreen !== false ? '85dvh' : (content.height || '600px'),
+                        border: 0,
+                    }}
+                    loading="lazy"
+                />
+            ) : (
+                <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                    <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                        📄 Paste a PDF URL in the editor panel
                     </p>
-                )}
-            </div>
+                </div>
+            )}
+            {content.caption && (
+                <p
+                    className="py-3 text-center text-sm"
+                    style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
+                >
+                    {content.caption}
+                </p>
+            )}
         </motion.section>
     );
 };
