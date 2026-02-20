@@ -223,7 +223,7 @@ const InvitationDetails = () => {
                         <Button variant="outline" onClick={copyLink}>
                             <Copy size={18} className="mr-2" /> Copy Link
                         </Button>
-                        <Button variant="outline" onClick={() => navigate(`/dashboard/create?edit=${id}`)}>
+                        <Button variant="outline" onClick={() => navigate(`/dashboard/edit/${id}`)}>
                             <Edit3 size={18} className="mr-2" /> Edit Design
                         </Button>
                         {invitation.isPaid && (

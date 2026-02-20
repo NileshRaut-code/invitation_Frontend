@@ -66,6 +66,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/invitations" element={<MyInvitations />} />
             <Route path="/dashboard/create" element={<CreateInvitation />} />
+            <Route path="/dashboard/edit/:id" element={<CreateInvitation />} />
             <Route path="/dashboard/invitations/:id" element={<InvitationDetails />} />
             <Route path="/dashboard/payment/:invitationId" element={<Payment />} />
             <Route path="/dashboard/payments" element={<PaymentHistory />} />

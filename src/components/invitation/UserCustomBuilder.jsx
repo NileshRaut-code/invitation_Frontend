@@ -4,7 +4,7 @@ import {
     Image, Type, Calendar, MapPin, Users, MessageSquare,
     Layout, Divide, Timer, Palette, Settings2, Check, Undo2, Redo2,
     Smartphone, Monitor, Lock, QrCode, Share2, Layers,
-    GripVertical, AlertCircle, Video, X
+    GripVertical, AlertCircle, Video, X, Loader2, ImagePlus, FileText
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { Button } from '../../components/ui';
@@ -15,8 +15,8 @@ const FEATURE_ACCESS = {
     // Block types
     blockTypes: {
         free: ['hero', 'eventDetails', 'venue', 'rsvp', 'message', 'countdown', 'divider', 'footer'],
-        paid: ['hero', 'eventDetails', 'venue', 'gallery', 'rsvp', 'message', 'countdown', 'divider', 'footer', 'qrcode', 'socialShare', 'youtube'],
-        scratch: ['hero', 'eventDetails', 'venue', 'gallery', 'rsvp', 'message', 'countdown', 'divider', 'footer', 'qrcode', 'socialShare', 'youtube'],
+        paid: ['hero', 'eventDetails', 'venue', 'gallery', 'rsvp', 'message', 'countdown', 'divider', 'footer', 'qrcode', 'socialShare', 'youtube', 'fullImage', 'pdf'],
+        scratch: ['hero', 'eventDetails', 'venue', 'gallery', 'rsvp', 'message', 'countdown', 'divider', 'footer', 'qrcode', 'socialShare', 'youtube', 'fullImage', 'pdf'],
     },
     // Settings features
     features: {
@@ -61,6 +61,8 @@ const BLOCK_TYPES = [
     { type: 'qrcode', label: 'QR Code', icon: QrCode, description: 'Scannable QR code' },
     { type: 'socialShare', label: 'Social Share', icon: Share2, description: 'Share buttons' },
     { type: 'youtube', label: 'YouTube Video', icon: Video, description: 'Embed YouTube video' },
+    { type: 'fullImage', label: 'Full Image', icon: ImagePlus, description: 'Full-width invitation image' },
+    { type: 'pdf', label: 'PDF Document', icon: FileText, description: 'Embed a PDF file' },
 ];
 
 // ─── Default block settings ───
@@ -113,6 +115,10 @@ const getDefaultContent = (type) => {
             return { title: 'Share This Invitation', whatsapp: true, facebook: true, twitter: true, copyLink: true };
         case 'youtube':
             return { videoUrl: '', title: '', caption: '', aspectRatio: '16:9', autoplay: false };
+        case 'fullImage':
+            return { imageUrl: '', title: '', caption: '', altText: '', maxHeight: '800px', objectFit: 'contain' };
+        case 'pdf':
+            return { pdfUrl: '', title: '', caption: '', height: '600px' };
         default:
             return {};
     }
@@ -210,7 +216,7 @@ const MAX_HISTORY = 30;
 // =====================================
 // MAIN COMPONENT
 // =====================================
-const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch' }) => {
+const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch', isSaving = false }) => {
     const [selectedBlock, setSelectedBlock] = useState(null);
     const [activePanel, setActivePanel] = useState('blocks'); // blocks, layers, theme
     const [previewMode, setPreviewMode] = useState(false);
@@ -391,7 +397,7 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
 
         return (
             <div>
-                <p className="text-xs text-gray-500 uppercase font-medium mb-3">Block Options</p>
+                <p className="text-xs text-gray-500 uppercase font-medium mb-3">Block Content</p>
                 <div className="space-y-3">
                     {/* Hero-specific */}
                     {t === 'hero' && (
@@ -403,6 +409,18 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                             <div>
                                 <label className="text-sm block mb-1">Subtitle</label>
                                 <input type="text" value={selectedBlock.content?.subtitle || ''} onChange={(e) => updateBlockContent('subtitle', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Description</label>
+                                <textarea value={selectedBlock.content?.description || ''} onChange={(e) => updateBlockContent('description', e.target.value)} rows={3} placeholder="A short description or welcome message..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Overlay Text</label>
+                                <input type="text" value={selectedBlock.content?.overlayText || ''} onChange={(e) => updateBlockContent('overlayText', e.target.value)} placeholder="e.g., 'You are invited'" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Title Size: {selectedBlock.content?.titleSize || 48}px</label>
+                                <input type="range" min={24} max={96} step={2} value={selectedBlock.content?.titleSize || 48} onChange={(e) => updateBlockContent('titleSize', parseInt(e.target.value))} className="w-full accent-indigo-600" />
                             </div>
                             <div className="flex items-center gap-2">
                                 <input type="checkbox" checked={selectedBlock.content?.showDate ?? true} onChange={(e) => updateBlockContent('showDate', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
@@ -424,6 +442,14 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                     {/* Event Details */}
                     {t === 'eventDetails' && (
                         <>
+                            <div>
+                                <label className="text-sm block mb-1">Section Title</label>
+                                <input type="text" value={selectedBlock.content?.heading || ''} onChange={(e) => updateBlockContent('heading', e.target.value)} placeholder="e.g., Event Details" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Description</label>
+                                <textarea value={selectedBlock.content?.description || ''} onChange={(e) => updateBlockContent('description', e.target.value)} rows={2} placeholder="Optional note about the event..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
                             <div>
                                 <label className="text-sm block mb-1">Layout</label>
                                 <select value={selectedBlock.content?.layout || 'horizontal'} onChange={(e) => updateBlockContent('layout', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
@@ -453,6 +479,10 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                             <div>
                                 <label className="text-sm block mb-1">Title</label>
                                 <input type="text" value={selectedBlock.content?.title || ''} onChange={(e) => updateBlockContent('title', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Description</label>
+                                <textarea value={selectedBlock.content?.description || ''} onChange={(e) => updateBlockContent('description', e.target.value)} rows={2} placeholder="Gallery description..." className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div>
                                 <label className="text-sm block mb-1">Layout</label>
@@ -507,6 +537,10 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                     <Plus size={14} /> Add Image URL
                                 </button>
                             </div>
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm">Title Color</label>
+                                <input type="color" value={selectedBlock.content?.titleColor || design.theme?.colors?.text || '#1f2937'} onChange={(e) => updateBlockContent('titleColor', e.target.value)} className="w-8 h-8 rounded cursor-pointer border" />
+                            </div>
                         </>
                     )}
 
@@ -552,8 +586,16 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <input type="text" value={selectedBlock.content?.subtitle || ''} onChange={(e) => updateBlockContent('subtitle', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div>
+                                <label className="text-sm block mb-1">Description</label>
+                                <textarea value={selectedBlock.content?.description || ''} onChange={(e) => updateBlockContent('description', e.target.value)} rows={2} placeholder="e.g., Please let us know if you can make it..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
                                 <label className="text-sm block mb-1">Button Text</label>
                                 <input type="text" value={selectedBlock.content?.buttonText || ''} onChange={(e) => updateBlockContent('buttonText', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Thank You Message</label>
+                                <input type="text" value={selectedBlock.content?.thankYouMessage || ''} onChange={(e) => updateBlockContent('thankYouMessage', e.target.value)} placeholder="Thank you for responding!" className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div>
                                 <label className="text-sm block mb-1">Button Style</label>
@@ -570,6 +612,10 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                     <option value="embedded">Embedded (On Page)</option>
                                 </select>
                             </div>
+                            <div className="flex items-center gap-2">
+                                <input type="checkbox" checked={selectedBlock.content?.showGuestCount ?? false} onChange={(e) => updateBlockContent('showGuestCount', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
+                                <label className="text-sm">Ask number of guests</label>
+                            </div>
                         </>
                     )}
 
@@ -584,9 +630,24 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <label className="text-sm block mb-1">Message Text</label>
                                 <textarea value={selectedBlock.content?.text || ''} onChange={(e) => updateBlockContent('text', e.target.value)} rows={4} className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
+                            <div>
+                                <label className="text-sm block mb-1">Secondary Text</label>
+                                <textarea value={selectedBlock.content?.secondaryText || ''} onChange={(e) => updateBlockContent('secondaryText', e.target.value)} rows={2} placeholder="Additional note or details..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Author / Attribution</label>
+                                <input type="text" value={selectedBlock.content?.author || ''} onChange={(e) => updateBlockContent('author', e.target.value)} placeholder="e.g., — With love, John & Jane" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
                             <div className="flex items-center gap-2">
                                 <input type="checkbox" checked={selectedBlock.content?.useAccentFont ?? false} onChange={(e) => updateBlockContent('useAccentFont', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
                                 <label className="text-sm">Use Accent Font</label>
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Font Style</label>
+                                <select value={selectedBlock.content?.fontStyle || 'normal'} onChange={(e) => updateBlockContent('fontStyle', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <option value="normal">Normal</option>
+                                    <option value="italic">Italic</option>
+                                </select>
                             </div>
                         </>
                     )}
@@ -599,12 +660,25 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <input type="text" value={selectedBlock.content?.title || ''} onChange={(e) => updateBlockContent('title', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div>
+                                <label className="text-sm block mb-1">Subtitle</label>
+                                <input type="text" value={selectedBlock.content?.subtitle || ''} onChange={(e) => updateBlockContent('subtitle', e.target.value)} placeholder="e.g., Days until the big day!" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
                                 <label className="text-sm block mb-1">Style</label>
                                 <select value={selectedBlock.content?.style || 'minimal'} onChange={(e) => updateBlockContent('style', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
                                     {COUNTDOWN_STYLES.map(s => (
                                         <option key={s.value} value={s.value}>{s.label}</option>
                                     ))}
                                 </select>
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Labels</label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <input type="text" value={selectedBlock.content?.dayLabel || 'Days'} onChange={(e) => updateBlockContent('dayLabel', e.target.value)} placeholder="Days" className="px-2 py-1 border rounded text-xs" />
+                                    <input type="text" value={selectedBlock.content?.hourLabel || 'Hours'} onChange={(e) => updateBlockContent('hourLabel', e.target.value)} placeholder="Hours" className="px-2 py-1 border rounded text-xs" />
+                                    <input type="text" value={selectedBlock.content?.minLabel || 'Minutes'} onChange={(e) => updateBlockContent('minLabel', e.target.value)} placeholder="Minutes" className="px-2 py-1 border rounded text-xs" />
+                                    <input type="text" value={selectedBlock.content?.secLabel || 'Seconds'} onChange={(e) => updateBlockContent('secLabel', e.target.value)} placeholder="Seconds" className="px-2 py-1 border rounded text-xs" />
+                                </div>
                             </div>
                         </>
                     )}
@@ -647,8 +721,16 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                 <input type="text" value={selectedBlock.content?.tagline || ''} onChange={(e) => updateBlockContent('tagline', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div>
+                                <label className="text-sm block mb-1">Secondary Text</label>
+                                <input type="text" value={selectedBlock.content?.secondaryText || ''} onChange={(e) => updateBlockContent('secondaryText', e.target.value)} placeholder="e.g., See you there!" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
                                 <label className="text-sm block mb-1">Copyright Text</label>
                                 <input type="text" value={selectedBlock.content?.copyright || ''} onChange={(e) => updateBlockContent('copyright', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Website URL</label>
+                                <input type="text" value={selectedBlock.content?.websiteUrl || ''} onChange={(e) => updateBlockContent('websiteUrl', e.target.value)} placeholder="https://..." className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                         </>
                     )}
@@ -659,6 +741,18 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                             <div>
                                 <label className="text-sm block mb-1">Title</label>
                                 <input type="text" value={selectedBlock.content?.title || ''} onChange={(e) => updateBlockContent('title', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Description</label>
+                                <textarea value={selectedBlock.content?.description || ''} onChange={(e) => updateBlockContent('description', e.target.value)} rows={2} placeholder="About the venue..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Directions / How to reach</label>
+                                <textarea value={selectedBlock.content?.directions || ''} onChange={(e) => updateBlockContent('directions', e.target.value)} rows={2} placeholder="Nearest metro, landmark..." className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Parking Info</label>
+                                <input type="text" value={selectedBlock.content?.parkingInfo || ''} onChange={(e) => updateBlockContent('parkingInfo', e.target.value)} placeholder="e.g., Free parking available" className="w-full px-3 py-2 border rounded-lg text-sm" />
                             </div>
                             <div className="flex items-center gap-2">
                                 <input type="checkbox" checked={selectedBlock.content?.showMap ?? true} onChange={(e) => updateBlockContent('showMap', e.target.checked)} className="w-4 h-4 text-indigo-600 rounded" />
@@ -676,7 +770,7 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                             </div>
                             <div>
                                 <label className="text-sm block mb-1">QR Size</label>
-                                <input type="range" min={100} max={300} step={10} value={selectedBlock.content?.size || 200} onChange={(e) => updateBlockContent('size', parseInt(e.target.value))} className="w-full" />
+                                <input type="range" min={100} max={300} step={10} value={selectedBlock.content?.size || 200} onChange={(e) => updateBlockContent('size', parseInt(e.target.value))} className="w-full accent-indigo-600" />
                                 <span className="text-xs text-gray-500">{selectedBlock.content?.size || 200}px</span>
                             </div>
                         </>
@@ -695,6 +789,72 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                     <label className="text-sm capitalize">{platform === 'copyLink' ? 'Copy Link' : platform}</label>
                                 </div>
                             ))}
+                        </>
+                    )}
+
+                    {/* Full Image */}
+                    {t === 'fullImage' && (
+                        <>
+                            <div>
+                                <label className="text-sm block mb-1">Image URL</label>
+                                <input type="text" value={selectedBlock.content?.imageUrl || ''} onChange={(e) => updateBlockContent('imageUrl', e.target.value)} placeholder="https://example.com/image.jpg" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Title (optional)</label>
+                                <input type="text" value={selectedBlock.content?.title || ''} onChange={(e) => updateBlockContent('title', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Caption (optional)</label>
+                                <input type="text" value={selectedBlock.content?.caption || ''} onChange={(e) => updateBlockContent('caption', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Alt Text</label>
+                                <input type="text" value={selectedBlock.content?.altText || ''} onChange={(e) => updateBlockContent('altText', e.target.value)} placeholder="Describe the image" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Max Height</label>
+                                <select value={selectedBlock.content?.maxHeight || '800px'} onChange={(e) => updateBlockContent('maxHeight', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <option value="400px">Small (400px)</option>
+                                    <option value="600px">Medium (600px)</option>
+                                    <option value="800px">Large (800px)</option>
+                                    <option value="none">Full Size</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Fit</label>
+                                <select value={selectedBlock.content?.objectFit || 'contain'} onChange={(e) => updateBlockContent('objectFit', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <option value="contain">Contain (full image)</option>
+                                    <option value="cover">Cover (fill area)</option>
+                                    <option value="fill">Stretch</option>
+                                </select>
+                            </div>
+                        </>
+                    )}
+
+                    {/* PDF */}
+                    {t === 'pdf' && (
+                        <>
+                            <div>
+                                <label className="text-sm block mb-1">PDF URL</label>
+                                <input type="text" value={selectedBlock.content?.pdfUrl || ''} onChange={(e) => updateBlockContent('pdfUrl', e.target.value)} placeholder="https://example.com/document.pdf" className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Title (optional)</label>
+                                <input type="text" value={selectedBlock.content?.title || ''} onChange={(e) => updateBlockContent('title', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Caption (optional)</label>
+                                <input type="text" value={selectedBlock.content?.caption || ''} onChange={(e) => updateBlockContent('caption', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm" />
+                            </div>
+                            <div>
+                                <label className="text-sm block mb-1">Viewer Height</label>
+                                <select value={selectedBlock.content?.height || '600px'} onChange={(e) => updateBlockContent('height', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                    <option value="400px">Small (400px)</option>
+                                    <option value="600px">Medium (600px)</option>
+                                    <option value="800px">Large (800px)</option>
+                                    <option value="1000px">Extra Large (1000px)</option>
+                                </select>
+                            </div>
                         </>
                     )}
                 </div>
@@ -746,9 +906,12 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                         {previewMode ? <Settings2 size={18} className="mr-2" /> : <Eye size={18} className="mr-2" />}
                         {previewMode ? 'Edit' : 'Preview'}
                     </Button>
-                    <Button onClick={handleSave}>
-                        <Check size={18} className="mr-2" />
-                        Finish Design
+                    <Button onClick={handleSave} disabled={isSaving}>
+                        {isSaving ? (
+                            <><Loader2 size={18} className="mr-2 animate-spin" /> Saving...</>
+                        ) : (
+                            <><Check size={18} className="mr-2" /> Finish Design</>
+                        )}
                     </Button>
                 </div>
             </div>
@@ -1059,6 +1222,56 @@ const UserCustomBuilder = ({ initialData, onSave, onCancel, planType = 'scratch'
                                                 </button>
                                             ))}
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Typography */}
+                            <div>
+                                <p className="text-xs text-gray-500 uppercase font-medium mb-3">Typography</p>
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="text-sm block mb-1">Font Size: {selectedBlock.settings?.fontSize || 16}px</label>
+                                        <input type="range" min={12} max={72} step={1} value={selectedBlock.settings?.fontSize || 16} onChange={(e) => updateBlockSettings('fontSize', parseInt(e.target.value))} className="w-full accent-indigo-600" />
+                                        <div className="flex justify-between text-xs text-gray-400 mt-0.5"><span>12</span><span>72</span></div>
+                                    </div>
+                                    <div>
+                                        <label className="text-sm block mb-1">Font Weight</label>
+                                        <select value={selectedBlock.settings?.fontWeight || '400'} onChange={(e) => updateBlockSettings('fontWeight', e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm">
+                                            <option value="300">Light</option>
+                                            <option value="400">Normal</option>
+                                            <option value="500">Medium</option>
+                                            <option value="600">Semi-Bold</option>
+                                            <option value="700">Bold</option>
+                                            <option value="800">Extra Bold</option>
+                                        </select>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <label className="text-sm flex-1">Text Color</label>
+                                        <input type="color" value={selectedBlock.settings?.textColor || design.theme?.colors?.text || '#1f2937'} onChange={(e) => updateBlockSettings('textColor', e.target.value)} className="w-8 h-8 rounded cursor-pointer border" />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm block mb-1">Letter Spacing: {selectedBlock.settings?.letterSpacing || 0}px</label>
+                                        <input type="range" min={-1} max={5} step={0.25} value={selectedBlock.settings?.letterSpacing || 0} onChange={(e) => updateBlockSettings('letterSpacing', parseFloat(e.target.value))} className="w-full accent-indigo-600" />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm block mb-1">Line Height: {selectedBlock.settings?.lineHeight || 1.5}</label>
+                                        <input type="range" min={1} max={2.5} step={0.1} value={selectedBlock.settings?.lineHeight || 1.5} onChange={(e) => updateBlockSettings('lineHeight', parseFloat(e.target.value))} className="w-full accent-indigo-600" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Spacing */}
+                            <div>
+                                <p className="text-xs text-gray-500 uppercase font-medium mb-3">Spacing</p>
+                                <div className="space-y-3">
+                                    <div>
+                                        <label className="text-sm block mb-1">Margin Top: {selectedBlock.settings?.marginTop || 0}px</label>
+                                        <input type="range" min={0} max={80} step={4} value={selectedBlock.settings?.marginTop || 0} onChange={(e) => updateBlockSettings('marginTop', parseInt(e.target.value))} className="w-full accent-indigo-600" />
+                                    </div>
+                                    <div>
+                                        <label className="text-sm block mb-1">Margin Bottom: {selectedBlock.settings?.marginBottom || 0}px</label>
+                                        <input type="range" min={0} max={80} step={4} value={selectedBlock.settings?.marginBottom || 0} onChange={(e) => updateBlockSettings('marginBottom', parseInt(e.target.value))} className="w-full accent-indigo-600" />
                                     </div>
                                 </div>
                             </div>

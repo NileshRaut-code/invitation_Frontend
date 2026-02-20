@@ -11,6 +11,8 @@ import {
     QRCodeBlock,
     SocialShareBlock,
     YouTubeBlock,
+    FullImageBlock,
+    PDFBlock,
 } from './index';
 
 // Map block types to components
@@ -27,6 +29,8 @@ const blockComponents = {
     qrcode: QRCodeBlock,
     socialShare: SocialShareBlock,
     youtube: YouTubeBlock,
+    fullImage: FullImageBlock,
+    pdf: PDFBlock,
 };
 
 /**

@@ -77,6 +77,12 @@ export const HeroBlock = ({ block, data, theme, isEditing }) => {
                     }}
                 />
             )}
+            {content.overlayText && (
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#ffffff', backdropFilter: 'blur(4px)' }}>
+                    {content.overlayText}
+                </div>
+            )}
             <div className={`relative z-10 text-${settings.textAlign || 'center'} max-w-4xl mx-auto px-4`}>
                 {content.showSubtitle !== false && (
                     <p
@@ -90,14 +96,26 @@ export const HeroBlock = ({ block, data, theme, isEditing }) => {
                     </p>
                 )}
                 <h1
-                    className="text-5xl md:text-7xl font-bold mb-6"
+                    className="font-bold mb-6"
                     style={{
                         fontFamily: theme?.fonts?.heading || 'Playfair Display',
-                        color: styles.titleColor || theme?.colors?.text
+                        color: styles.titleColor || theme?.colors?.text,
+                        fontSize: content.titleSize ? `${content.titleSize}px` : undefined,
                     }}
                 >
                     {content.title || data.hostName || 'John & Jane'}
                 </h1>
+                {content.description && (
+                    <p
+                        className="text-lg mb-6 opacity-90 max-w-2xl mx-auto"
+                        style={{
+                            fontFamily: theme?.fonts?.body,
+                            color: styles.subtitleColor || theme?.colors?.textLight
+                        }}
+                    >
+                        {content.description}
+                    </p>
+                )}
                 {content.showDate !== false && data.eventDate && (
                     <p
                         className="text-2xl"
@@ -151,16 +169,22 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
         >
             <div className="max-w-4xl mx-auto px-4">
                 <h2
-                    className="text-3xl md:text-4xl font-bold mb-12"
+                    className="text-3xl md:text-4xl font-bold mb-4"
                     style={{
                         fontFamily: theme?.fonts?.heading,
                         color: theme?.colors?.text
                     }}
                 >
-                    {content.title || 'Event Details'}
+                    {content.heading || content.title || 'Event Details'}
                 </h2>
+                {content.description && (
+                    <p className="text-lg mb-12 opacity-80" style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}>
+                        {content.description}
+                    </p>
+                )}
+                {!content.description && <div className="mb-12" />}
 
-                <div className={`grid ${content.layout === 'horizontal' ? 'md:grid-cols-3' : 'grid-cols-1'} gap-8`}>
+                <div className={`grid ${content.layout === 'horizontal' ? 'md:grid-cols-3' : content.layout === 'card' ? 'md:grid-cols-3' : 'grid-cols-1'} gap-8`}>
                     {content.showDate !== false && (
                         <div className="p-6 rounded-xl" style={{ backgroundColor: theme?.colors?.background }}>
                             <div className="text-4xl mb-4">📅</div>
@@ -217,17 +241,35 @@ export const VenueBlock = ({ block, data, theme }) => {
         >
             <div className="max-w-4xl mx-auto px-4 text-center">
                 <h2
-                    className="text-3xl md:text-4xl font-bold mb-6"
+                    className="text-3xl md:text-4xl font-bold mb-4"
                     style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
                 >
                     {content.title || 'Venue'}
                 </h2>
+                {content.description && (
+                    <p className="text-lg mb-6 opacity-80" style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}>
+                        {content.description}
+                    </p>
+                )}
                 <p className="text-xl mb-2" style={{ color: theme?.colors?.text }}>
                     {content.venueName || data.venue || 'Venue Name'}
                 </p>
-                <p className="text-lg mb-8" style={{ color: theme?.colors?.textLight }}>
+                <p className="text-lg mb-4" style={{ color: theme?.colors?.textLight }}>
                     {content.venueAddress || data.venueAddress || 'Venue Address'}
                 </p>
+
+                {content.directions && (
+                    <div className="mb-6 p-4 rounded-xl inline-block" style={{ backgroundColor: theme?.colors?.surface }}>
+                        <p className="text-sm font-medium mb-1" style={{ color: theme?.colors?.text }}>🧭 How to reach</p>
+                        <p className="text-sm" style={{ color: theme?.colors?.textLight }}>{content.directions}</p>
+                    </div>
+                )}
+
+                {content.parkingInfo && (
+                    <p className="text-sm mb-6" style={{ color: theme?.colors?.textLight }}>
+                        🅿️ {content.parkingInfo}
+                    </p>
+                )}
 
                 {content.showMap && data.googleMapsLink && (
                     <div className="rounded-xl overflow-hidden" style={{ height: content.mapHeight || '400px' }}>
@@ -307,13 +349,22 @@ export const GalleryBlock = ({ block, data, theme }) => {
         >
             <div className="max-w-6xl mx-auto px-4">
                 <h2
-                    className="text-3xl md:text-4xl font-bold mb-12 text-center"
-                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    className="text-3xl md:text-4xl font-bold mb-4 text-center"
+                    style={{ fontFamily: theme?.fonts?.heading, color: content.titleColor || theme?.colors?.text }}
                 >
                     {content.title || 'Gallery'}
                 </h2>
+                {content.description && (
+                    <p className="text-lg mb-8 text-center opacity-80" style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}>
+                        {content.description}
+                    </p>
+                )}
+                {!content.description && <div className="mb-8" />}
 
-                <div className={`grid ${content.layout === 'carousel' ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-3'} gap-4`}>
+                <div
+                    className="grid gap-4"
+                    style={{ gridTemplateColumns: `repeat(${content.columns || 3}, minmax(0, 1fr))` }}
+                >
                     {images.map((img, index) => (
                         <motion.div
                             key={index}
@@ -353,17 +404,24 @@ export const RSVPBlock = ({ block, data, theme, onRSVP, invitationId }) => {
         >
             <div className="max-w-2xl mx-auto px-4 text-center">
                 <h2
-                    className="text-3xl md:text-4xl font-bold mb-6"
+                    className="text-3xl md:text-4xl font-bold mb-4"
                     style={{ fontFamily: theme?.fonts?.heading, color: isEmbedded ? (theme?.colors?.text || '#1f2937') : '#ffffff' }}
                 >
                     {content.title || 'Will You Join Us?'}
                 </h2>
                 <p
-                    className="text-lg mb-8 opacity-90"
+                    className="text-lg mb-2 opacity-90"
                     style={{ color: isEmbedded ? (theme?.colors?.textLight || '#6b7280') : '#ffffff' }}
                 >
                     {content.subtitle || 'Please let us know if you can make it'}
                 </p>
+                {content.description && (
+                    <p className="text-base mb-6 opacity-75"
+                        style={{ color: isEmbedded ? (theme?.colors?.textLight || '#6b7280') : '#ffffffcc' }}>
+                        {content.description}
+                    </p>
+                )}
+                {!content.description && <div className="mb-6" />}
 
                 {isEmbedded ? (
                     <div className="bg-white p-8 rounded-xl shadow-xl max-w-lg mx-auto">
@@ -384,6 +442,12 @@ export const RSVPBlock = ({ block, data, theme, onRSVP, invitationId }) => {
                     >
                         {content.buttonText || 'RSVP Now'}
                     </button>
+                )}
+                {content.thankYouMessage && (
+                    <p className="mt-6 text-sm opacity-70"
+                        style={{ color: isEmbedded ? (theme?.colors?.textLight || '#6b7280') : '#ffffff', fontFamily: theme?.fonts?.accent }}>
+                        {content.thankYouMessage}
+                    </p>
                 )}
             </div>
         </motion.section>
@@ -418,11 +482,28 @@ export const MessageBlock = ({ block, data, theme }) => {
                     className="text-xl leading-relaxed"
                     style={{
                         fontFamily: content.useAccentFont ? theme?.fonts?.accent : theme?.fonts?.body,
-                        color: theme?.colors?.textLight
+                        color: theme?.colors?.textLight,
+                        fontStyle: content.fontStyle || 'normal',
                     }}
                 >
                     {content.text || data.message || 'Your message here...'}
                 </p>
+                {content.secondaryText && (
+                    <p
+                        className="text-base mt-6 opacity-80 leading-relaxed"
+                        style={{ fontFamily: theme?.fonts?.body, color: theme?.colors?.textLight }}
+                    >
+                        {content.secondaryText}
+                    </p>
+                )}
+                {content.author && (
+                    <p
+                        className="mt-6 text-lg"
+                        style={{ fontFamily: theme?.fonts?.accent, color: theme?.colors?.primary }}
+                    >
+                        {content.author}
+                    </p>
+                )}
             </div>
         </motion.section>
     );
@@ -450,11 +531,27 @@ export const FooterBlock = ({ block, data, theme }) => {
                     </p>
                 )}
                 <p
-                    className="text-2xl mb-6"
+                    className="text-2xl mb-4"
                     style={{ fontFamily: theme?.fonts?.accent, color: theme?.colors?.primary }}
                 >
                     {content.tagline || data.hostName || 'With Love'}
                 </p>
+                {content.secondaryText && (
+                    <p className="text-base mb-4 opacity-80" style={{ color: theme?.colors?.textLight }}>
+                        {content.secondaryText}
+                    </p>
+                )}
+                {content.websiteUrl && (
+                    <a
+                        href={content.websiteUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mb-4 text-sm underline transition-colors"
+                        style={{ color: theme?.colors?.primary }}
+                    >
+                        {content.websiteUrl}
+                    </a>
+                )}
                 <p className="text-sm" style={{ color: theme?.colors?.textLight }}>
                     {content.copyright || `Made with ❤️ using Invite Me`}
                 </p>
@@ -525,16 +622,22 @@ export const CountdownBlock = ({ block, data, theme }) => {
         >
             <div className="max-w-4xl mx-auto px-4 text-center">
                 <h2
-                    className="text-2xl font-bold mb-8"
+                    className="text-2xl font-bold mb-2"
                     style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
                 >
                     {content.title || 'Counting Down'}
                 </h2>
+                {content.subtitle && (
+                    <p className="text-base mb-6 opacity-80" style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}>
+                        {content.subtitle}
+                    </p>
+                )}
+                {!content.subtitle && <div className="mb-6" />}
                 <div className="flex justify-center gap-6">
                     {[
-                        { value: days, label: 'Days' },
-                        { value: hours, label: 'Hours' },
-                        { value: minutes, label: 'Minutes' },
+                        { value: days, label: content.dayLabel || 'Days' },
+                        { value: hours, label: content.hourLabel || 'Hours' },
+                        { value: minutes, label: content.minLabel || 'Minutes' },
                     ].map((item) => (
                         <div
                             key={item.label}
@@ -766,6 +869,116 @@ export const YouTubeBlock = ({ block, data, theme }) => {
     );
 };
 
+// Full Image Block — for users who have a pre-designed invitation image
+export const FullImageBlock = ({ block, data, theme }) => {
+    const { settings = {}, content = {} } = block;
+    const variants = getAnimationVariants(settings.animation);
+    const bgStyle = getBackgroundStyles(settings, theme?.colors?.background);
+
+    return (
+        <motion.section
+            className="py-8 md:py-12"
+            style={bgStyle}
+            initial={variants.initial}
+            whileInView={variants.animate}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+        >
+            <div className="max-w-5xl mx-auto px-4">
+                {content.title && (
+                    <h2
+                        className="text-3xl md:text-4xl font-bold mb-6 text-center"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title}
+                    </h2>
+                )}
+                {content.imageUrl ? (
+                    <div className="rounded-2xl overflow-hidden shadow-lg">
+                        <img
+                            src={content.imageUrl}
+                            alt={content.altText || content.title || 'Invitation Image'}
+                            className="w-full object-contain"
+                            style={{
+                                maxHeight: content.maxHeight || '800px',
+                                objectFit: content.objectFit || 'contain',
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <div className="border-2 border-dashed rounded-2xl p-16 text-center" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            🖼️ Paste an image URL in the editor panel
+                        </p>
+                    </div>
+                )}
+                {content.caption && (
+                    <p
+                        className="mt-4 text-center text-sm"
+                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
+                    >
+                        {content.caption}
+                    </p>
+                )}
+            </div>
+        </motion.section>
+    );
+};
+
+// PDF Block — embed a PDF document
+export const PDFBlock = ({ block, data, theme }) => {
+    const { settings = {}, content = {} } = block;
+    const variants = getAnimationVariants(settings.animation);
+    const bgStyle = getBackgroundStyles(settings, theme?.colors?.background);
+
+    return (
+        <motion.section
+            className="py-12 md:py-16"
+            style={bgStyle}
+            initial={variants.initial}
+            whileInView={variants.animate}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
+        >
+            <div className="max-w-4xl mx-auto px-4">
+                {content.title && (
+                    <h2
+                        className="text-3xl md:text-4xl font-bold mb-6 text-center"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title}
+                    </h2>
+                )}
+                {content.pdfUrl ? (
+                    <div className="rounded-2xl overflow-hidden shadow-lg border" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <iframe
+                            src={content.pdfUrl}
+                            title={content.title || 'PDF Document'}
+                            width="100%"
+                            style={{ height: content.height || '600px', border: 0 }}
+                            loading="lazy"
+                        />
+                    </div>
+                ) : (
+                    <div className="border-2 border-dashed rounded-2xl p-16 text-center" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            📄 Paste a PDF URL in the editor panel
+                        </p>
+                    </div>
+                )}
+                {content.caption && (
+                    <p
+                        className="mt-4 text-center text-sm"
+                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
+                    >
+                        {content.caption}
+                    </p>
+                )}
+            </div>
+        </motion.section>
+    );
+};
+
 export default {
     HeroBlock,
     EventDetailsBlock,
@@ -779,4 +992,6 @@ export default {
     QRCodeBlock,
     SocialShareBlock,
     YouTubeBlock,
+    FullImageBlock,
+    PDFBlock,
 };
