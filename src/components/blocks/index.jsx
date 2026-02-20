@@ -157,10 +157,12 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16 md:py-24"
+            className="flex items-center justify-center"
             style={{
                 ...bgStyle,
                 textAlign: settings.textAlign || 'center',
+                minHeight: '100dvh',
+                padding: '2rem 0',
             }}
             initial={variants.initial}
             whileInView={variants.animate}
@@ -232,8 +234,8 @@ export const VenueBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16 md:py-24"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
@@ -314,8 +316,8 @@ export const GalleryBlock = ({ block, data, theme }) => {
     if (images.length === 0) {
         return (
             <motion.section
-                className="py-16 md:py-24"
-                style={bgStyle}
+                className="flex items-center justify-center"
+                style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
                 initial={variants.initial}
                 whileInView={variants.animate}
                 viewport={{ once: true }}
@@ -340,8 +342,8 @@ export const GalleryBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16 md:py-24"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
@@ -395,8 +397,8 @@ export const RSVPBlock = ({ block, data, theme, onRSVP, invitationId }) => {
     return (
         <motion.section
             id="rsvp"
-            className="py-16 md:py-24"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
@@ -462,8 +464,8 @@ export const MessageBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16 md:py-24"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
@@ -613,8 +615,8 @@ export const CountdownBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
@@ -819,8 +821,8 @@ export const YouTubeBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16 md:py-24"
-            style={bgStyle}
+            className="flex items-center justify-center"
+            style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
