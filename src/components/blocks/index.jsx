@@ -47,6 +47,19 @@ const getBackgroundStyles = (settings, defaultColor) => {
     };
 };
 
+const BackgroundOverlay = ({ settings }) => {
+    if (!settings?.overlayEnabled) return null;
+    return (
+        <div
+            className="absolute inset-0 z-0"
+            style={{
+                backgroundColor: settings.overlayColor || '#000000',
+                opacity: settings.overlayOpacity ?? 0.3,
+            }}
+        />
+    );
+};
+
 // Hero Block - Main header with background
 export const HeroBlock = ({ block, data, theme, isEditing }) => {
     const { settings = {}, content = {}, styles = {} } = block;
@@ -68,15 +81,7 @@ export const HeroBlock = ({ block, data, theme, isEditing }) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            {settings.overlayEnabled && (
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        backgroundColor: settings.overlayColor,
-                        opacity: settings.overlayOpacity,
-                    }}
-                />
-            )}
+            <BackgroundOverlay settings={settings} />
             {content.overlayText && (
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 px-6 py-2 rounded-full text-sm font-medium tracking-wider uppercase"
                     style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#ffffff', backdropFilter: 'blur(4px)' }}>
@@ -157,7 +162,7 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{
                 ...bgStyle,
                 textAlign: settings.textAlign || 'center',
@@ -169,7 +174,8 @@ export const EventDetailsBlock = ({ block, data, theme }) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4">
                 <h2
                     className="text-3xl md:text-4xl font-bold mb-4"
                     style={{
@@ -316,14 +322,15 @@ export const GalleryBlock = ({ block, data, theme }) => {
     if (images.length === 0) {
         return (
             <motion.section
-                className="flex items-center justify-center"
+                className="relative flex items-center justify-center"
                 style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
                 initial={variants.initial}
                 whileInView={variants.animate}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
             >
-                <div className="max-w-6xl mx-auto px-4 text-center">
+                <BackgroundOverlay settings={settings} />
+                <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
                     <h2
                         className="text-3xl md:text-4xl font-bold mb-6"
                         style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
@@ -342,14 +349,15 @@ export const GalleryBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-6xl mx-auto px-4">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-6xl mx-auto px-4">
                 <h2
                     className="text-3xl md:text-4xl font-bold mb-4 text-center"
                     style={{ fontFamily: theme?.fonts?.heading, color: content.titleColor || theme?.colors?.text }}
@@ -397,14 +405,15 @@ export const RSVPBlock = ({ block, data, theme, onRSVP, invitationId }) => {
     return (
         <motion.section
             id="rsvp"
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-2xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-2xl mx-auto px-4 text-center">
                 <h2
                     className="text-3xl md:text-4xl font-bold mb-4"
                     style={{ fontFamily: theme?.fonts?.heading, color: isEmbedded ? (theme?.colors?.text || '#1f2937') : '#ffffff' }}
@@ -464,14 +473,15 @@ export const MessageBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-3xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
                 {content.title && (
                     <h2
                         className="text-3xl font-bold mb-8"
@@ -519,14 +529,15 @@ export const FooterBlock = ({ block, data, theme }) => {
 
     return (
         <motion.footer
-            className="py-12"
+            className="relative py-12"
             style={bgStyle}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
                 {content.showContact && data.hostContact && (
                     <p className="mb-4" style={{ color: theme?.colors?.textLight }}>
                         Contact: {data.hostContact}
@@ -570,8 +581,9 @@ export const DividerBlock = ({ block, theme }) => {
     const thickness = content.thickness || '1px';
 
     return (
-        <div className="py-8" style={bgStyle}>
-            <div className="max-w-4xl mx-auto px-4 flex items-center justify-center">
+        <div className="relative py-8" style={bgStyle}>
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 flex items-center justify-center">
                 {content.style === 'ornament' ? (
                     <div className="text-4xl" style={{ color: dividerColor }}>✦ ✦ ✦</div>
                 ) : content.style === 'dots' ? (
@@ -615,14 +627,15 @@ export const CountdownBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
                 <h2
                     className="text-2xl font-bold mb-2"
                     style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
@@ -676,14 +689,15 @@ export const QRCodeBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-16"
+            className="relative py-16 md:py-24"
             style={bgStyle}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
                 <h2
                     className="text-2xl font-bold mb-6"
                     style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
@@ -752,14 +766,15 @@ export const SocialShareBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="py-12"
+            className="relative py-12"
             style={bgStyle}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4 text-center">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
                 <h2
                     className="text-2xl font-bold mb-6"
                     style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
@@ -821,14 +836,15 @@ export const YouTubeBlock = ({ block, data, theme }) => {
 
     return (
         <motion.section
-            className="flex items-center justify-center"
+            className="relative flex items-center justify-center"
             style={{ ...bgStyle, minHeight: '100dvh', padding: '2rem 0' }}
             initial={variants.initial}
             whileInView={variants.animate}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            <div className="max-w-4xl mx-auto px-4">
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 max-w-4xl mx-auto px-4 w-full">
                 {content.title && (
                     <h2
                         className="text-3xl md:text-4xl font-bold mb-8 text-center"
@@ -860,7 +876,7 @@ export const YouTubeBlock = ({ block, data, theme }) => {
                 )}
                 {content.caption && (
                     <p
-                        className="mt-4 text-center text-sm"
+                        className="py-3 text-center text-sm"
                         style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
                     >
                         {content.caption}
@@ -890,40 +906,43 @@ export const FullImageBlock = ({ block, data, theme }) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            {content.title && (
-                <h2
-                    className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-2xl md:text-3xl font-bold text-center px-4"
-                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
-                >
-                    {content.title}
-                </h2>
-            )}
-            {content.imageUrl ? (
-                <img
-                    src={content.imageUrl}
-                    alt={content.altText || content.title || 'Invitation Image'}
-                    className="w-full h-full"
-                    style={{
-                        objectFit: content.objectFit || 'contain',
-                        minHeight: content.fitScreen !== false ? '100dvh' : undefined,
-                        maxHeight: content.fitScreen !== false ? '100dvh' : (content.maxHeight || '800px'),
-                    }}
-                />
-            ) : (
-                <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
-                    <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
-                        🖼️ Paste an image URL in the editor panel
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center">
+                {content.title && (
+                    <h2
+                        className="absolute top-6 left-1/2 -translate-x-1/2 z-10 text-2xl md:text-3xl font-bold text-center px-4"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title}
+                    </h2>
+                )}
+                {content.imageUrl ? (
+                    <img
+                        src={content.imageUrl}
+                        alt={content.altText || content.title || 'Invitation Image'}
+                        className="w-full h-full"
+                        style={{
+                            objectFit: content.objectFit || 'contain',
+                            minHeight: content.fitScreen !== false ? '100dvh' : undefined,
+                            maxHeight: content.fitScreen !== false ? '100dvh' : (content.maxHeight || '800px'),
+                        }}
+                    />
+                ) : (
+                    <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            🖼️ Paste an image URL in the editor panel
+                        </p>
+                    </div>
+                )}
+                {content.caption && (
+                    <p
+                        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center text-sm px-4 py-2 rounded-full"
+                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body, backgroundColor: 'rgba(255,255,255,0.8)' }}
+                    >
+                        {content.caption}
                     </p>
-                </div>
-            )}
-            {content.caption && (
-                <p
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center text-sm px-4 py-2 rounded-full"
-                    style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body, backgroundColor: 'rgba(255,255,255,0.8)' }}
-                >
-                    {content.caption}
-                </p>
-            )}
+                )}
+            </div>
         </motion.section>
     );
 };
@@ -947,40 +966,43 @@ export const PDFBlock = ({ block, data, theme }) => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: settings.animationDelay || 0 }}
         >
-            {content.title && (
-                <h2
-                    className="text-2xl md:text-3xl font-bold py-4 text-center"
-                    style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
-                >
-                    {content.title}
-                </h2>
-            )}
-            {content.pdfUrl ? (
-                <iframe
-                    src={content.pdfUrl}
-                    title={content.title || 'PDF Document'}
-                    className="w-full flex-1"
-                    style={{
-                        minHeight: content.fitScreen !== false ? '85dvh' : (content.height || '600px'),
-                        border: 0,
-                    }}
-                    loading="lazy"
-                />
-            ) : (
-                <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
-                    <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
-                        📄 Paste a PDF URL in the editor panel
+            <BackgroundOverlay settings={settings} />
+            <div className="relative z-10 w-full flex-1 flex flex-col">
+                {content.title && (
+                    <h2
+                        className="text-2xl md:text-3xl font-bold py-4 text-center"
+                        style={{ fontFamily: theme?.fonts?.heading, color: theme?.colors?.text }}
+                    >
+                        {content.title}
+                    </h2>
+                )}
+                {content.pdfUrl ? (
+                    <iframe
+                        src={content.pdfUrl}
+                        title={content.title || 'PDF Document'}
+                        className="w-full flex-1"
+                        style={{
+                            minHeight: content.fitScreen !== false ? '85dvh' : (content.height || '600px'),
+                            border: 0,
+                        }}
+                        loading="lazy"
+                    />
+                ) : (
+                    <div className="border-2 border-dashed rounded-2xl p-16 text-center m-8" style={{ borderColor: theme?.colors?.border || '#e5e7eb' }}>
+                        <p className="text-lg" style={{ color: theme?.colors?.textLight || '#9ca3af' }}>
+                            📄 Paste a PDF URL in the editor panel
+                        </p>
+                    </div>
+                )}
+                {content.caption && (
+                    <p
+                        className="py-3 text-center text-sm"
+                        style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
+                    >
+                        {content.caption}
                     </p>
-                </div>
-            )}
-            {content.caption && (
-                <p
-                    className="py-3 text-center text-sm"
-                    style={{ color: theme?.colors?.textLight, fontFamily: theme?.fonts?.body }}
-                >
-                    {content.caption}
-                </p>
-            )}
+                )}
+            </div>
         </motion.section>
     );
 };
