@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 import { BlocksRenderer } from '../components/blocks/BlockRenderer';
 import RSVPModal from '../components/invitation/RSVPModal';
@@ -46,7 +46,6 @@ const PublicInvitation = () => {
         );
     }
 
-    // Determine design source (Custom or Template)
     const design = invitation.design || invitation.template?.design;
 
     if (!design) {
@@ -59,7 +58,6 @@ const PublicInvitation = () => {
         );
     }
 
-    // Merge theme with user customizations (overrides)
     const baseTheme = design.theme || {};
     const theme = {
         ...baseTheme,
@@ -76,7 +74,7 @@ const PublicInvitation = () => {
 
     return (
         <div
-            className="min-h-screen"
+            className="min-h-screen relative"
             style={{
                 backgroundColor: theme.colors?.background || '#ffffff',
                 fontFamily: theme.fonts?.body || 'sans-serif'
@@ -95,6 +93,18 @@ const PublicInvitation = () => {
                 onClose={() => setIsRSVPModalOpen(false)}
                 invitationId={invitation._id}
             />
+
+            {/* Watermark for unpaid/free invitations */}
+            {!invitation.isPaid && (
+                <div className="fixed bottom-0 left-0 right-0 z-50">
+                    <Link
+                        to="/"
+                        className="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-2.5 px-4 text-sm font-medium hover:from-indigo-700 hover:to-purple-700 transition-all"
+                    >
+                        Made with ❤️ by Invite Me — Create your own free invitation
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };

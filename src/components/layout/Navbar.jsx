@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, LogOut, LayoutDashboard, Settings } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Settings, Moon, Sun, Globe } from 'lucide-react';
 import { logout } from '../../store/slices/authSlice';
 import { toast } from 'react-toastify';
+import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import api from '../../api/api';
 
 const Navbar = () => {
@@ -13,6 +15,8 @@ const Navbar = () => {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { isDark, toggleTheme } = useTheme();
+    const { lang, switchLanguage } = useLanguage();
 
     const handleLogout = async () => {
         try {
@@ -53,56 +57,72 @@ const Navbar = () => {
                         </Link>
 
                         {user ? (
-                            <div className="relative">
+                            <div className="flex items-center gap-2">
+                                {/* Language Toggle */}
                                 <button
-                                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                    className="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                                    onClick={() => switchLanguage(lang === 'en' ? 'hi' : 'en')}
+                                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors text-xs font-bold" title="Switch language"
                                 >
-                                    <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                                        <span className="text-white text-sm font-medium">
-                                            {user.name?.charAt(0).toUpperCase()}
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-700 font-medium">{user.name}</span>
+                                    {lang === 'en' ? 'हिं' : 'EN'}
+                                </button>
+                                {/* Dark Mode Toggle */}
+                                <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors" title="Toggle dark mode">
+                                    {isDark ? <Sun size={18} /> : <Moon size={18} />}
                                 </button>
 
-                                <AnimatePresence>
-                                    {isProfileOpen && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 10 }}
-                                            className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border py-2"
-                                        >
-                                            <Link
-                                                to="/dashboard"
-                                                className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50"
-                                                onClick={() => setIsProfileOpen(false)}
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                        className="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                                    >
+                                        {user.avatar ? (
+                                            <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                                        ) : (
+                                            <div className="w-8 h-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                                                <span className="text-white text-sm font-medium">{user.name?.charAt(0).toUpperCase()}</span>
+                                            </div>
+                                        )}
+                                        <span className="text-gray-700 font-medium">{user.name}</span>
+                                    </button>
+
+                                    <AnimatePresence>
+                                        {isProfileOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 10 }}
+                                                className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border py-2"
                                             >
-                                                <LayoutDashboard size={18} className="mr-3" />
-                                                Dashboard
-                                            </Link>
-                                            {user.role === 'admin' && (
                                                 <Link
-                                                    to="/admin"
+                                                    to="/dashboard"
                                                     className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50"
                                                     onClick={() => setIsProfileOpen(false)}
                                                 >
-                                                    <Settings size={18} className="mr-3" />
-                                                    Admin Panel
+                                                    <LayoutDashboard size={18} className="mr-3" />
+                                                    Dashboard
                                                 </Link>
-                                            )}
-                                            <hr className="my-2" />
-                                            <button
-                                                onClick={handleLogout}
-                                                className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50"
-                                            >
-                                                <LogOut size={18} className="mr-3" />
-                                                Logout
-                                            </button>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                                                {user.role === 'admin' && (
+                                                    <Link
+                                                        to="/admin"
+                                                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50"
+                                                        onClick={() => setIsProfileOpen(false)}
+                                                    >
+                                                        <Settings size={18} className="mr-3" />
+                                                        Admin Panel
+                                                    </Link>
+                                                )}
+                                                <hr className="my-2" />
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50"
+                                                >
+                                                    <LogOut size={18} className="mr-3" />
+                                                    Logout
+                                                </button>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
                         ) : (
                             <div className="flex items-center space-x-4">

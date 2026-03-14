@@ -9,6 +9,7 @@ import {
     Settings,
     LogOut,
     ChevronLeft,
+    X,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
@@ -24,7 +25,7 @@ const adminSidebarItems = [
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
 ];
 
-const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
+const AdminSidebar = ({ isCollapsed, setIsCollapsed, onMobileClose }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -42,6 +43,10 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
         }
     };
 
+    const handleNavClick = () => {
+        if (onMobileClose) onMobileClose();
+    };
+
     return (
         <motion.aside
             animate={{ width: isCollapsed ? 80 : 280 }}
@@ -51,35 +56,36 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-800">
                     {!isCollapsed && (
-                        <Link to="/admin" className="flex items-center space-x-2">
+                        <Link to="/admin" className="flex items-center space-x-2" onClick={handleNavClick}>
                             <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
                                 <span className="text-white font-bold text-xl">I</span>
                             </div>
                             <span className="text-xl font-bold">Admin</span>
                         </Link>
                     )}
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="p-2 rounded-lg hover:bg-gray-800 transition-colors"
-                    >
-                        <ChevronLeft
-                            size={20}
-                            className={`transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
-                        />
-                    </button>
+                    {onMobileClose ? (
+                        <button onClick={onMobileClose} className="p-2 rounded-lg hover:bg-gray-800 transition-colors">
+                            <X size={20} />
+                        </button>
+                    ) : (
+                        <button onClick={() => setIsCollapsed(!isCollapsed)} className="p-2 rounded-lg hover:bg-gray-800 transition-colors">
+                            <ChevronLeft size={20} className={`transition-transform ${isCollapsed ? 'rotate-180' : ''}`} />
+                        </button>
+                    )}
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                     {adminSidebarItems.map((item) => {
                         const isActive = location.pathname === item.path;
                         return (
                             <Link
                                 key={item.path}
                                 to={item.path}
+                                onClick={handleNavClick}
                                 className={`flex items-center p-3 rounded-xl transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600'
-                                        : 'hover:bg-gray-800'
+                                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600'
+                                    : 'hover:bg-gray-800'
                                     }`}
                             >
                                 <item.icon size={20} />
@@ -93,11 +99,13 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <div className="p-4 border-t border-gray-800">
                     {!isCollapsed && (
                         <div className="flex items-center mb-4">
-                            <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                                <span className="font-medium">
-                                    {user?.name?.charAt(0).toUpperCase()}
-                                </span>
-                            </div>
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
+                            ) : (
+                                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span className="font-medium">{user?.name?.charAt(0).toUpperCase()}</span>
+                                </div>
+                            )}
                             <div className="ml-3">
                                 <p className="font-medium">{user?.name}</p>
                                 <p className="text-sm text-gray-400">Administrator</p>
@@ -106,8 +114,7 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
                     )}
                     <button
                         onClick={handleLogout}
-                        className={`flex items-center w-full p-3 rounded-xl text-red-400 hover:bg-red-900/30 transition-colors ${isCollapsed ? 'justify-center' : ''
-                            }`}
+                        className={`flex items-center w-full p-3 rounded-xl text-red-400 hover:bg-red-900/30 transition-colors ${isCollapsed ? 'justify-center' : ''}`}
                     >
                         <LogOut size={20} />
                         {!isCollapsed && <span className="ml-3">Logout</span>}

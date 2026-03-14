@@ -5,7 +5,7 @@ import {
     Calendar, MapPin, Clock, Users, Eye, ExternalLink, Copy,
     ArrowLeft, Download, CheckCircle, XCircle, HelpCircle,
     Edit3, Share2, QrCode, MessageCircle, Mail, Smartphone,
-    Link2, Timer, ToggleLeft, ToggleRight, Save, X, Check
+    Link2, Timer, ToggleLeft, ToggleRight, Save, X, Check, CopyPlus
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { Button, Card, CardSkeleton } from '../../components/ui';
@@ -248,6 +248,18 @@ const InvitationDetails = () => {
                         </Button>
                         <Button variant="outline" onClick={() => navigate(`/dashboard/edit/${id}`)}>
                             <Edit3 size={18} className="mr-2" /> Edit Design
+                        </Button>
+                        <Button variant="outline" onClick={async () => {
+                            try {
+                                const { data } = await api.post(`/invitations/${id}/duplicate`);
+                                toast.success('Invitation duplicated!');
+                                navigate(`/dashboard/invitations/${data._id}`);
+                            } catch (err) { toast.error('Failed to duplicate'); }
+                        }}>
+                            <CopyPlus size={18} className="mr-2" /> Duplicate
+                        </Button>
+                        <Button variant="outline" onClick={() => navigate(`/dashboard/whatsapp/${id}`)}>
+                            <MessageCircle size={18} className="mr-2 text-green-500" /> WhatsApp Blast
                         </Button>
                         {invitation.isPaid && invitation.status === 'published' && (
                             <a href={`/invite/${invitation.slug}`} target="_blank" rel="noopener noreferrer">

@@ -8,6 +8,7 @@ import {
     Settings,
     LogOut,
     ChevronLeft,
+    X,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slices/authSlice';
@@ -22,7 +23,7 @@ const sidebarItems = [
     { icon: Settings, label: 'Settings', path: '/dashboard/settings' },
 ];
 
-const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
+const DashboardSidebar = ({ isCollapsed, setIsCollapsed, onMobileClose }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
         }
     };
 
+    const handleNavClick = () => {
+        if (onMobileClose) onMobileClose();
+    };
+
     return (
         <motion.aside
             animate={{ width: isCollapsed ? 80 : 280 }}
@@ -49,7 +54,7 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b">
                     {!isCollapsed && (
-                        <Link to="/" className="flex items-center space-x-2">
+                        <Link to="/" className="flex items-center space-x-2" onClick={handleNavClick}>
                             <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
                                 <span className="text-white font-bold text-xl">I</span>
                             </div>
@@ -58,25 +63,26 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
                             </span>
                         </Link>
                     )}
-                    <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                        className="p-2 rounded-lg hover:bg-gray-100"
-                    >
-                        <ChevronLeft
-                            size={20}
-                            className={`transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
-                        />
-                    </button>
+                    {onMobileClose ? (
+                        <button onClick={onMobileClose} className="p-2 rounded-lg hover:bg-gray-100">
+                            <X size={20} />
+                        </button>
+                    ) : (
+                        <button onClick={() => setIsCollapsed(!isCollapsed)} className="p-2 rounded-lg hover:bg-gray-100">
+                            <ChevronLeft size={20} className={`transition-transform ${isCollapsed ? 'rotate-180' : ''}`} />
+                        </button>
+                    )}
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                     {sidebarItems.map((item) => {
                         const isActive = location.pathname === item.path;
                         return (
                             <Link
                                 key={item.path}
                                 to={item.path}
+                                onClick={handleNavClick}
                                 className={`flex items-center p-3 rounded-xl transition-all ${isActive
                                     ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
                                     : 'text-gray-600 hover:bg-gray-100'
@@ -93,11 +99,13 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <div className="p-4 border-t">
                     {!isCollapsed && (
                         <div className="flex items-center mb-4">
-                            <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                                <span className="text-white font-medium">
-                                    {user?.name?.charAt(0).toUpperCase()}
-                                </span>
-                            </div>
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
+                            ) : (
+                                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span className="text-white font-medium">{user?.name?.charAt(0).toUpperCase()}</span>
+                                </div>
+                            )}
                             <div className="ml-3">
                                 <p className="font-medium text-gray-900">{user?.name}</p>
                                 <p className="text-sm text-gray-500">{user?.email}</p>
@@ -106,8 +114,7 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed }) => {
                     )}
                     <button
                         onClick={handleLogout}
-                        className={`flex items-center w-full p-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors ${isCollapsed ? 'justify-center' : ''
-                            }`}
+                        className={`flex items-center w-full p-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors ${isCollapsed ? 'justify-center' : ''}`}
                     >
                         <LogOut size={20} />
                         {!isCollapsed && <span className="ml-3">Logout</span>}

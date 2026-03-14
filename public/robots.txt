@@ -1,0 +1,13 @@
+# robots.txt for InviteMe
+# UNCOMMENT below lines when ready to index:
+
+# User-agent: *
+# Allow: /
+# Disallow: /dashboard/
+# Disallow: /admin/
+# Disallow: /api/
+# Sitemap: https://yourdomain.com/sitemap.xml
+
+# Currently blocking all crawlers:
+User-agent: *
+Disallow: /

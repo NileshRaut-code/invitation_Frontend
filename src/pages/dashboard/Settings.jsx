@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { User, Lock, Bell, Shield, Loader, Check, Camera, Mail, Phone, KeyRound } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -12,6 +12,8 @@ const Settings = () => {
     const { user } = useSelector((state) => state.auth);
     const [activeTab, setActiveTab] = useState('profile');
     const [isSaving, setIsSaving] = useState(false);
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const avatarInputRef = useRef(null);
 
     const [profileData, setProfileData] = useState({
         name: '',
@@ -130,13 +132,13 @@ const Settings = () => {
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`w-full flex items-center px-4 py-3 rounded-xl transition-all text-sm font-medium ${activeTab === tab.id
-                                        ? 'bg-indigo-50 text-indigo-700'
-                                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                                    ? 'bg-indigo-50 text-indigo-700'
+                                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                                     }`}
                             >
                                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center mr-3 ${activeTab === tab.id
-                                        ? `bg-gradient-to-br ${tab.gradient}`
-                                        : 'bg-gray-100'
+                                    ? `bg-gradient-to-br ${tab.gradient}`
+                                    : 'bg-gray-100'
                                     }`}>
                                     <tab.icon size={15} className={activeTab === tab.id ? 'text-white' : 'text-gray-400'} />
                                 </div>
@@ -160,18 +162,51 @@ const Settings = () => {
                                 {/* Avatar */}
                                 <div className="flex items-center mb-8 p-4 rounded-xl bg-gray-50/80">
                                     <div className="relative">
-                                        <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg"
-                                            style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-                                            {user?.name?.charAt(0).toUpperCase() || 'U'}
-                                        </div>
-                                        <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-lg shadow-md flex items-center justify-center text-gray-500 hover:text-indigo-600 transition-colors border border-gray-100">
-                                            <Camera size={14} />
+                                        {user?.avatar ? (
+                                            <img src={user.avatar} alt={user.name} className="w-20 h-20 rounded-2xl object-cover shadow-lg" />
+                                        ) : (
+                                            <div className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg"
+                                                style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+                                                {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                            </div>
+                                        )}
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            ref={avatarInputRef}
+                                            className="hidden"
+                                            onChange={async (e) => {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
+                                                setUploadingAvatar(true);
+                                                try {
+                                                    const formData = new FormData();
+                                                    formData.append('image', file);
+                                                    const { data: uploadData } = await api.post('/invitations/upload', formData);
+                                                    const { data } = await api.put('/auth/profile', { avatar: uploadData.url });
+                                                    dispatch(setCredentials({ ...user, ...data }));
+                                                    toast.success('Avatar updated!');
+                                                } catch {
+                                                    toast.error('Failed to upload avatar');
+                                                } finally {
+                                                    setUploadingAvatar(false);
+                                                }
+                                            }}
+                                        />
+                                        <button
+                                            onClick={() => avatarInputRef.current?.click()}
+                                            disabled={uploadingAvatar}
+                                            className="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-lg shadow-md flex items-center justify-center text-gray-500 hover:text-indigo-600 transition-colors border border-gray-100"
+                                        >
+                                            {uploadingAvatar ? <Loader size={14} className="animate-spin" /> : <Camera size={14} />}
                                         </button>
                                     </div>
                                     <div className="ml-5">
                                         <p className="font-semibold text-gray-900">{user?.name}</p>
                                         <p className="text-sm text-gray-500">{user?.email}</p>
-                                        <p className="text-xs text-gray-400 mt-1">Member since {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : 'N/A'}</p>
+                                        {!user?.isEmailVerified && (
+                                            <p className="text-xs text-amber-600 mt-1">⚠️ Email not verified</p>
+                                        )}
                                     </div>
                                 </div>
 
