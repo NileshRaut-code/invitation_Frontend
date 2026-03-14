@@ -121,21 +121,21 @@ const Home = () => {
                     </div>
 
                     {/* Bottom fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-slate-900 to-transparent" />
                 </section>
 
                 {/* ── How It Works ── */}
-                <section className="py-24 bg-white relative">
+                <section className="py-24 bg-white dark:bg-slate-900 relative">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-                            <span className="inline-block px-4 py-2 bg-indigo-50 text-indigo-600 rounded-full text-sm font-medium mb-4">How It Works</span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Three Simple Steps</h2>
-                            <p className="text-xl text-gray-500 max-w-2xl mx-auto">Create and share a beautiful invitation in under 5 minutes.</p>
+                            <span className="inline-block px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-sm font-medium mb-4">How It Works</span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Three Simple Steps</h2>
+                            <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">Create and share a beautiful invitation in under 5 minutes.</p>
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                             {/* Connecting line (desktop only) */}
-                            <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200" />
+                            <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-indigo-200 dark:from-indigo-800 via-purple-200 dark:via-purple-800 to-pink-200 dark:to-pink-800" />
 
                             {steps.map((step, index) => (
                                 <motion.div
@@ -149,12 +149,12 @@ const Home = () => {
                                     <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-lg"
                                         style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                                         <step.icon className="text-white" size={32} />
-                                        <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-sm font-bold text-indigo-600">
+                                        <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-md flex items-center justify-center text-sm font-bold text-indigo-600 dark:text-indigo-400">
                                             {step.step}
                                         </span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                                    <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">{step.description}</p>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{step.title}</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto leading-relaxed">{step.description}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -162,12 +162,12 @@ const Home = () => {
                 </section>
 
                 {/* ── Features Grid ── */}
-                <section className="py-24 bg-gray-50">
+                <section className="py-24 bg-gray-50 dark:bg-slate-950">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 bg-purple-50 text-purple-600 rounded-full text-sm font-medium mb-4">Features</span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Everything You Need</h2>
-                            <p className="text-xl text-gray-500 max-w-2xl mx-auto">Powerful tools to create, customize, and share your invitations.</p>
+                            <span className="inline-block px-4 py-2 bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full text-sm font-medium mb-4">Features</span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Everything You Need</h2>
+                            <p className="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">Powerful tools to create, customize, and share your invitations.</p>
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,13 +178,13 @@ const Home = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="group p-8 rounded-3xl bg-white border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                                    className="group p-8 rounded-3xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                                 >
                                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
                                         <feature.icon className="text-white" size={24} />
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                                    <p className="text-gray-500 leading-relaxed">{feature.description}</p>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature.title}</h3>
+                                    <p className="text-gray-500 dark:text-gray-400 leading-relaxed">{feature.description}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -192,12 +192,12 @@ const Home = () => {
                 </section>
 
                 {/* ── Social Proof / Testimonials ── */}
-                <section className="py-24 bg-white">
+                <section className="py-24 bg-white dark:bg-slate-900">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-4">Testimonials</span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Loved by Thousands</h2>
-                            <p className="text-xl text-gray-500">See what our users are saying about Invite Me.</p>
+                            <span className="inline-block px-4 py-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-full text-sm font-medium mb-4">Testimonials</span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Loved by Thousands</h2>
+                            <p className="text-xl text-gray-500 dark:text-gray-400">See what our users are saying about Invite Me.</p>
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -208,23 +208,22 @@ const Home = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.15 }}
-                                    className="p-8 rounded-3xl border border-gray-100 hover:shadow-lg transition-shadow relative"
-                                    style={{ background: 'linear-gradient(135deg, #fefce8 0%, #fff 50%)' }}
+                                    className="p-8 rounded-3xl border border-gray-100 dark:border-slate-700 hover:shadow-lg transition-shadow relative dark:bg-slate-800"
                                 >
                                     <div className="flex gap-1 mb-4">
                                         {[...Array(t.rating)].map((_, i) => (
                                             <Star key={i} size={18} className="text-amber-400 fill-amber-400" />
                                         ))}
                                     </div>
-                                    <p className="text-gray-700 mb-6 leading-relaxed italic">"{t.quote}"</p>
+                                    <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed italic">"{t.quote}"</p>
                                     <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
                                             style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                                             {t.name.charAt(0)}
                                         </div>
                                         <div>
-                                            <div className="font-semibold text-gray-900">{t.name}</div>
-                                            <div className="text-sm text-gray-500">{t.event}</div>
+                                            <div className="font-semibold text-gray-900 dark:text-white">{t.name}</div>
+                                            <div className="text-sm text-gray-500 dark:text-gray-400">{t.event}</div>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -234,12 +233,12 @@ const Home = () => {
                 </section>
 
                 {/* ── Pricing Preview ── */}
-                <section className="py-24 bg-gray-50">
+                <section className="py-24 bg-gray-50 dark:bg-slate-950">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-                            <span className="inline-block px-4 py-2 bg-green-50 text-green-600 rounded-full text-sm font-medium mb-4">Pricing</span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-                            <p className="text-xl text-gray-500">Start free. Upgrade when you need more.</p>
+                            <span className="inline-block px-4 py-2 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-sm font-medium mb-4">Pricing</span>
+                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Simple, Transparent Pricing</h2>
+                            <p className="text-xl text-gray-500 dark:text-gray-400">Start free. Upgrade when you need more.</p>
                         </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -252,9 +251,8 @@ const Home = () => {
                                     transition={{ delay: index * 0.1 }}
                                     className={`relative p-8 rounded-3xl border-2 transition-all hover:shadow-xl ${plan.popular
                                         ? 'border-indigo-500 shadow-lg scale-105'
-                                        : 'border-gray-100 bg-white'
+                                        : 'border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800'
                                         }`}
-                                    style={plan.popular ? { background: 'linear-gradient(135deg, #eef2ff 0%, #fff 100%)' } : {}}
                                 >
                                     {plan.popular && (
                                         <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-sm font-bold text-white"
@@ -262,14 +260,14 @@ const Home = () => {
                                             Most Popular
                                         </div>
                                     )}
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>
                                     <div className="mb-6">
-                                        <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                                        {plan.period && <span className="text-gray-500">{plan.period}</span>}
+                                        <span className="text-4xl font-bold text-gray-900 dark:text-white">{plan.price}</span>
+                                        {plan.period && <span className="text-gray-500 dark:text-gray-400">{plan.period}</span>}
                                     </div>
                                     <ul className="space-y-3 mb-8">
                                         {plan.features.map((f) => (
-                                            <li key={f} className="flex items-center gap-2 text-gray-600">
+                                            <li key={f} className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                                 <CheckCircle size={16} className="text-green-500 flex-shrink-0" />
                                                 {f}
                                             </li>
@@ -278,7 +276,7 @@ const Home = () => {
                                     <Link to="/pricing">
                                         <button className={`w-full py-3 rounded-xl font-semibold transition-all hover:scale-105 ${plan.popular
                                             ? 'text-white shadow-lg'
-                                            : 'border-2 border-gray-200 text-gray-700 hover:border-indigo-500 hover:text-indigo-600'
+                                            : 'border-2 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:border-indigo-500 hover:text-indigo-600'
                                             }`}
                                             style={plan.popular ? { background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' } : {}}>
                                             {plan.cta}
@@ -288,7 +286,7 @@ const Home = () => {
                             ))}
                         </div>
                         <div className="text-center mt-8">
-                            <Link to="/pricing" className="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center gap-1">
+                            <Link to="/pricing" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium inline-flex items-center gap-1">
                                 View full pricing details <ArrowRight size={16} />
                             </Link>
                         </div>

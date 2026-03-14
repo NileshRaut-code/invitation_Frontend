@@ -9,7 +9,7 @@ const AdminLayout = () => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 dark:bg-slate-950">
             {/* Mobile hamburger */}
             <div className="lg:hidden fixed top-0 left-0 right-0 bg-gray-900 text-white z-50 flex items-center px-4 py-3">
                 <button onClick={() => setIsMobileOpen(true)} className="p-2 rounded-lg hover:bg-gray-800">

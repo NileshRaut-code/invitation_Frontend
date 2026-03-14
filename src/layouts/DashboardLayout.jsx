@@ -9,11 +9,11 @@ const DashboardLayout = () => {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
             {/* Mobile hamburger */}
-            <div className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b shadow-sm z-50 flex items-center px-4 py-3">
-                <button onClick={() => setIsMobileOpen(true)} className="p-2 rounded-lg hover:bg-gray-100">
-                    <Menu size={24} className="text-gray-700" />
+            <div className="lg:hidden fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 shadow-sm z-50 flex items-center px-4 py-3">
+                <button onClick={() => setIsMobileOpen(true)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    <Menu size={24} className="text-gray-700 dark:text-gray-200" />
                 </button>
                 <span className="ml-3 text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">InviteMe</span>
             </div>

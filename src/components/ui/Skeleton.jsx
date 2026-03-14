@@ -1,5 +1,5 @@
 const Skeleton = ({ className = '', variant = 'text', width, height }) => {
-    const baseClasses = 'animate-pulse bg-gray-200 rounded';
+    const baseClasses = 'animate-pulse bg-gray-200 dark:bg-slate-700 rounded';
 
     const variants = {
         text: 'h-4 w-full',
@@ -24,7 +24,7 @@ const Skeleton = ({ className = '', variant = 'text', width, height }) => {
 
 // Skeleton variants for common use cases
 export const CardSkeleton = () => (
-    <div className="bg-white rounded-2xl shadow-lg p-6 space-y-4">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 space-y-4">
         <Skeleton variant="thumbnail" />
         <Skeleton variant="title" />
         <Skeleton variant="text" />

@@ -5,7 +5,7 @@ import { Button } from '../components/ui';
 
 const NotFound = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center px-4">
             <motion.div
                 className="text-center max-w-md"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -20,8 +20,8 @@ const NotFound = () => {
                 >
                     404
                 </motion.div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-3">Page Not Found</h1>
-                <p className="text-gray-600 mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Page Not Found</h1>
+                <p className="text-gray-600 dark:text-gray-400 mb-8">
                     Oops! The page you're looking for doesn't exist or has been moved.
                 </p>
                 <div className="flex gap-3 justify-center">

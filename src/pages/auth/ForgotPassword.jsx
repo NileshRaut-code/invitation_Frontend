@@ -28,14 +28,14 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 px-4 sm:px-6 lg:px-8">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
                 className="max-w-md w-full"
             >
-                <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+                <div className="bg-white/80 dark:bg-slate-800/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
                     {/* Header */}
                     <div className="text-center mb-8">
                         <motion.div
@@ -46,8 +46,8 @@ const ForgotPassword = () => {
                         >
                             <KeyRound className="w-8 h-8 text-white" />
                         </motion.div>
-                        <h2 className="text-3xl font-bold text-gray-900">Forgot Password</h2>
-                        <p className="mt-2 text-gray-600">
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Forgot Password</h2>
+                        <p className="mt-2 text-gray-600 dark:text-gray-400">
                             {isSubmitted
                                 ? 'Check your email for reset instructions'
                                 : 'Enter your email to receive a reset link'}
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Email address"
                                     required
-                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all bg-white dark:bg-slate-700 dark:text-white dark:placeholder-gray-400"
                                 />
                             </div>
 
@@ -81,11 +81,11 @@ const ForgotPassword = () => {
                             <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
-                                className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4"
+                                className="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-4"
                             >
                                 <Mail className="w-8 h-8 text-green-600" />
                             </motion.div>
-                            <p className="text-gray-600">
+                            <p className="text-gray-600 dark:text-gray-400">
                                 We've sent a password reset link to <strong>{email}</strong>
                             </p>
                         </div>
@@ -95,7 +95,7 @@ const ForgotPassword = () => {
                     <div className="mt-6 text-center">
                         <Link
                             to="/login"
-                            className="inline-flex items-center text-gray-600 hover:text-gray-900"
+                            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         >
                             <ArrowLeft size={16} className="mr-2" />
                             Back to Login

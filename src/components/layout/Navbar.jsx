@@ -31,7 +31,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-slate-700">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -46,13 +46,13 @@ const Navbar = () => {
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link to="/categories" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        <Link to="/categories" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                             Categories
                         </Link>
-                        <Link to="/templates" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        <Link to="/templates" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                             Templates
                         </Link>
-                        <Link to="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+                        <Link to="/pricing" className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                             Pricing
                         </Link>
 
@@ -61,19 +61,19 @@ const Navbar = () => {
                                 {/* Language Toggle */}
                                 <button
                                     onClick={() => switchLanguage(lang === 'en' ? 'hi' : 'en')}
-                                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors text-xs font-bold" title="Switch language"
+                                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-300 transition-colors text-xs font-bold" title="Switch language"
                                 >
                                     {lang === 'en' ? 'हिं' : 'EN'}
                                 </button>
                                 {/* Dark Mode Toggle */}
-                                <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors" title="Toggle dark mode">
+                                <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-300 transition-colors" title="Toggle dark mode">
                                     {isDark ? <Sun size={18} /> : <Moon size={18} />}
                                 </button>
 
                                 <div className="relative">
                                     <button
                                         onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                        className="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                                        className="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                                     >
                                         {user.avatar ? (
                                             <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
@@ -82,7 +82,7 @@ const Navbar = () => {
                                                 <span className="text-white text-sm font-medium">{user.name?.charAt(0).toUpperCase()}</span>
                                             </div>
                                         )}
-                                        <span className="text-gray-700 font-medium">{user.name}</span>
+                                        <span className="text-gray-700 dark:text-gray-200 font-medium">{user.name}</span>
                                     </button>
 
                                     <AnimatePresence>
@@ -91,11 +91,11 @@ const Navbar = () => {
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: 10 }}
-                                                className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border py-2"
+                                                className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 py-2"
                                             >
                                                 <Link
                                                     to="/dashboard"
-                                                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50"
+                                                    className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700"
                                                     onClick={() => setIsProfileOpen(false)}
                                                 >
                                                     <LayoutDashboard size={18} className="mr-3" />
@@ -104,17 +104,17 @@ const Navbar = () => {
                                                 {user.role === 'admin' && (
                                                     <Link
                                                         to="/admin"
-                                                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50"
+                                                        className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700"
                                                         onClick={() => setIsProfileOpen(false)}
                                                     >
                                                         <Settings size={18} className="mr-3" />
                                                         Admin Panel
                                                     </Link>
                                                 )}
-                                                <hr className="my-2" />
+                                                <hr className="my-2 border-gray-200 dark:border-slate-700" />
                                                 <button
                                                     onClick={handleLogout}
-                                                    className="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50"
+                                                    className="flex items-center w-full px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
                                                 >
                                                     <LogOut size={18} className="mr-3" />
                                                     Logout
@@ -128,7 +128,7 @@ const Navbar = () => {
                             <div className="flex items-center space-x-4">
                                 <Link
                                     to="/login"
-                                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
                                 >
                                     Login
                                 </Link>
@@ -145,7 +145,7 @@ const Navbar = () => {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+                        className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200"
                     >
                         {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
@@ -159,21 +159,21 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-t"
+                        className="md:hidden bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700"
                     >
                         <div className="px-4 py-4 space-y-3">
-                            <Link to="/categories" className="block py-2 text-gray-600">Categories</Link>
-                            <Link to="/templates" className="block py-2 text-gray-600">Templates</Link>
-                            <Link to="/pricing" className="block py-2 text-gray-600">Pricing</Link>
+                            <Link to="/categories" className="block py-2 text-gray-600 dark:text-gray-300">Categories</Link>
+                            <Link to="/templates" className="block py-2 text-gray-600 dark:text-gray-300">Templates</Link>
+                            <Link to="/pricing" className="block py-2 text-gray-600 dark:text-gray-300">Pricing</Link>
                             {user ? (
                                 <>
-                                    <Link to="/dashboard" className="block py-2 text-gray-600">Dashboard</Link>
-                                    <button onClick={handleLogout} className="block py-2 text-red-600">Logout</button>
+                                    <Link to="/dashboard" className="block py-2 text-gray-600 dark:text-gray-300">Dashboard</Link>
+                                    <button onClick={handleLogout} className="block py-2 text-red-600 dark:text-red-400">Logout</button>
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login" className="block py-2 text-gray-600">Login</Link>
-                                    <Link to="/register" className="block py-2 text-indigo-600 font-medium">Get Started</Link>
+                                    <Link to="/login" className="block py-2 text-gray-600 dark:text-gray-300">Login</Link>
+                                    <Link to="/register" className="block py-2 text-indigo-600 dark:text-indigo-400 font-medium">Get Started</Link>
                                 </>
                             )}
                         </div>
