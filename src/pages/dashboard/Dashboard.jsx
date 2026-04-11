@@ -121,14 +121,14 @@ const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.08 }}
                     >
-                        <div className="p-5 md:p-6 rounded-2xl bg-white border border-gray-100 hover:shadow-lg transition-all group">
+                        <div className="p-5 md:p-6 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 hover:shadow-lg transition-all group">
                             <div className="flex items-center gap-3 mb-3">
                                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                                     <stat.icon size={18} className="text-white" />
                                 </div>
                             </div>
-                            <p className="text-3xl md:text-4xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                            <p className="text-sm text-gray-500">{stat.label}</p>
+                            <p className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>
                         </div>
                     </motion.div>
                 ))}
@@ -136,7 +136,7 @@ const Dashboard = () => {
 
             {/* Quick Actions */}
             <div className="mb-8">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h2>
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Quick Actions</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {quickActions.map((action, index) => (
                         <motion.div
@@ -146,11 +146,11 @@ const Dashboard = () => {
                             transition={{ delay: 0.3 + index * 0.05 }}
                         >
                             <Link to={action.to}
-                                className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:-translate-y-0.5 transition-all group">
+                                className="flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:-translate-y-0.5 transition-all group">
                                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                                     <action.icon size={22} className="text-white" />
                                 </div>
-                                <span className="text-sm font-medium text-gray-700">{action.label}</span>
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{action.label}</span>
                             </Link>
                         </motion.div>
                     ))}
@@ -158,10 +158,10 @@ const Dashboard = () => {
             </div>
 
             {/* Recent Invitations */}
-            <div className="rounded-2xl bg-white border border-gray-100 p-6">
+            <div className="rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 p-6">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-bold text-gray-900">Recent Invitations</h2>
-                    <Link to="/dashboard/invitations" className="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Recent Invitations</h2>
+                    <Link to="/dashboard/invitations" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 text-sm font-medium flex items-center gap-1">
                         View All <ArrowRight size={14} />
                     </Link>
                 </div>
@@ -172,8 +172,8 @@ const Dashboard = () => {
                             style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                             <Sparkles size={32} className="text-white" />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">No invitations yet</h3>
-                        <p className="text-gray-500 mb-6 max-w-sm mx-auto">Create your first digital invitation to get started!</p>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No invitations yet</h3>
+                        <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">Create your first digital invitation to get started!</p>
                         <Link to="/dashboard/create">
                             <button className="px-6 py-3 rounded-xl text-white font-semibold flex items-center gap-2 mx-auto hover:scale-105 transition-all"
                                 style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
@@ -193,10 +193,10 @@ const Dashboard = () => {
                             >
                                 <Link
                                     to={`/dashboard/invitations/${inv._id}`}
-                                    className="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-all border border-transparent hover:border-gray-100 group"
+                                    className="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-all border border-transparent hover:border-gray-100 dark:hover:border-slate-600 group"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100 shadow-sm">
+                                        <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border border-gray-100 dark:border-slate-600 shadow-sm">
                                             <img
                                                 src={inv.template?.previewImage || ''}
                                                 alt={inv.content?.eventName}
@@ -205,7 +205,7 @@ const Dashboard = () => {
                                             />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                            <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">
                                                 {inv.content?.eventName || 'Untitled Event'}
                                             </h3>
                                             <div className="flex items-center text-xs text-gray-400 gap-3 mt-1">

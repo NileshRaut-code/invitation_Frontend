@@ -35,8 +35,8 @@ const AdminUsers = () => {
         <div>
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-                <p className="text-gray-600 mt-1">Manage platform users</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Users</h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">Manage platform users</p>
             </div>
 
             {/* Search */}
@@ -47,7 +47,7 @@ const AdminUsers = () => {
                     placeholder="Search users..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 />
             </div>
 
@@ -56,14 +56,14 @@ const AdminUsers = () => {
                 {isLoading ? (
                     <div className="p-8">
                         {[1, 2, 3, 4, 5].map((i) => (
-                            <div key={i} className="h-12 bg-gray-100 rounded mb-4 animate-pulse" />
+                            <div key={i} className="h-12 bg-gray-100 dark:bg-slate-700 rounded mb-4 animate-pulse" />
                         ))}
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gray-50">
-                                <tr className="text-left text-gray-600 text-sm">
+                            <thead className="bg-gray-50 dark:bg-slate-700">
+                                <tr className="text-left text-gray-600 dark:text-gray-300 text-sm">
                                     <th className="px-6 py-4">User</th>
                                     <th className="px-6 py-4">Role</th>
                                     <th className="px-6 py-4">Invitations</th>
@@ -78,7 +78,7 @@ const AdminUsers = () => {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: index * 0.05 }}
-                                        className="border-t hover:bg-gray-50"
+                                        className="border-t dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                                     >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
@@ -86,28 +86,28 @@ const AdminUsers = () => {
                                                     {user.name?.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="font-medium text-gray-900">{user.name}</p>
-                                                    <p className="text-sm text-gray-500">{user.email}</p>
+                                                <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${user.role === 'admin'
-                                                ? 'bg-purple-100 text-purple-700'
-                                                : 'bg-gray-100 text-gray-700'
+                                                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                                                : 'bg-gray-100 dark:bg-slate-600 text-gray-700 dark:text-gray-300'
                                                 }`}>
                                                 {user.role === 'admin' && <Shield size={12} className="mr-1" />}
                                                 {user.role}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-gray-600">
+                                        <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
                                             {user.invitationCount || 0}
                                         </td>
-                                        <td className="px-6 py-4 text-gray-600">
+                                        <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
                                             {new Date(user.createdAt).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+                                            <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs">
                                                 Active
                                             </span>
                                         </td>

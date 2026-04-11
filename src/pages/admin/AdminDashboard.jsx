@@ -51,8 +51,8 @@ const AdminDashboard = () => {
         <div>
             {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-gray-600 mt-1">Welcome back! Here's your platform overview.</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">Welcome back! Here's your platform overview.</p>
             </div>
 
             {/* Stats */}
@@ -67,8 +67,8 @@ const AdminDashboard = () => {
                         <Card className="p-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-gray-600">{stat.label}</p>
-                                    <p className="text-3xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</p>
+                                    <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{stat.value}</p>
                                 </div>
                                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center`}>
                                     <stat.icon className="text-white" size={24} />
@@ -82,23 +82,23 @@ const AdminDashboard = () => {
             {/* Recent Payments */}
             <Card className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-semibold text-gray-900">Recent Payments</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Recent Payments</h2>
                     <TrendingUp className="text-green-500" size={24} />
                 </div>
 
                 {isLoading ? (
                     <div className="space-y-4">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse" />
+                            <div key={i} className="h-12 bg-gray-100 dark:bg-slate-700 rounded-lg animate-pulse" />
                         ))}
                     </div>
                 ) : stats.recentPayments.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No payments yet</p>
+                    <p className="text-gray-500 dark:text-gray-400 text-center py-8">No payments yet</p>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="text-left text-gray-500 text-sm border-b">
+                                <tr className="text-left text-gray-500 dark:text-gray-400 text-sm border-b dark:border-slate-700">
                                     <th className="pb-3">User</th>
                                     <th className="pb-3">Amount</th>
                                     <th className="pb-3">Status</th>
@@ -107,14 +107,14 @@ const AdminDashboard = () => {
                             </thead>
                             <tbody>
                                 {stats.recentPayments.map((payment) => (
-                                    <tr key={payment._id} className="border-b last:border-0">
+                                    <tr key={payment._id} className="border-b dark:border-slate-700 last:border-0">
                                         <td className="py-4">
-                                            <p className="font-medium text-gray-900">{payment.user?.name}</p>
-                                            <p className="text-sm text-gray-500">{payment.user?.email}</p>
+                                            <p className="font-medium text-gray-900 dark:text-white">{payment.user?.name}</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">{payment.user?.email}</p>
                                         </td>
-                                        <td className="py-4 font-semibold text-gray-900">₹{payment.amount}</td>
+                                        <td className="py-4 font-semibold text-gray-900 dark:text-white">₹{payment.amount}</td>
                                         <td className="py-4">
-                                            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">
+                                            <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm">
                                                 {payment.status}
                                             </span>
                                         </td>

@@ -62,11 +62,11 @@ const Categories = () => {
                             </div>
                         </motion.div>
                     </div>
-                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 dark:from-slate-900 to-transparent" />
                 </section>
 
                 {/* Categories Grid */}
-                <section className="py-16 bg-gray-50">
+                <section className="py-16 bg-gray-50 dark:bg-slate-900">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         {isLoading ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -77,7 +77,7 @@ const Categories = () => {
                                 <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                                     <Layers size={36} className="text-white" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                                     {searchQuery ? 'No matching categories' : 'No categories yet'}
                                 </h3>
                                 <p className="text-gray-500 max-w-md mx-auto">
@@ -94,7 +94,7 @@ const Categories = () => {
                                         transition={{ delay: index * 0.08 }}
                                     >
                                         <Link to={`/categories/${category.slug}`} className="block group">
-                                            <div className="rounded-3xl overflow-hidden bg-white border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                                            <div className="rounded-3xl overflow-hidden bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                                                 <div
                                                     className="h-56 bg-cover bg-center relative overflow-hidden"
                                                     style={{
@@ -126,8 +126,8 @@ const Categories = () => {
                                                 </div>
 
                                                 <div className="p-5 flex items-center justify-between">
-                                                    <p className="text-gray-500 text-sm line-clamp-1 flex-1 mr-4">{category.description || 'Explore templates'}</p>
-                                                    <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-100 transition-colors">
+                                                    <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-1 flex-1 mr-4">{category.description || 'Explore templates'}</p>
+                                                    <div className="w-9 h-9 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/50 transition-colors">
                                                         <ArrowRight size={16} className="text-indigo-600 group-hover:translate-x-0.5 transition-transform" />
                                                     </div>
                                                 </div>

@@ -31,15 +31,15 @@ const ContactUs = () => {
     return (
         <>
             <SEO title="Contact Us — Invite Me" description="Get in touch with the Invite Me team." />
-            <div className="min-h-screen bg-gray-50 py-16 px-4">
+            <div className="min-h-screen bg-gray-50 dark:bg-slate-900 py-16 px-4">
                 <div className="max-w-5xl mx-auto">
                     <motion.div
                         className="text-center mb-12"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <h1 className="text-4xl font-bold text-gray-900 mb-3">Get in Touch</h1>
-                        <p className="text-lg text-gray-600">Have a question, feedback, or need help? We'd love to hear from you.</p>
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">Get in Touch</h1>
+                        <p className="text-lg text-gray-600 dark:text-gray-400">Have a question, feedback, or need help? We'd love to hear from you.</p>
                     </motion.div>
 
                     <div className="grid md:grid-cols-3 gap-8">
@@ -50,34 +50,34 @@ const ContactUs = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
                         >
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700">
                                 <Mail className="text-indigo-600 mb-3" size={24} />
-                                <h3 className="font-semibold text-gray-900 mb-1">Email Us</h3>
-                                <p className="text-sm text-gray-600">support@inviteme.app</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Email Us</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">support@inviteme.app</p>
                             </div>
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700">
                                 <MessageCircle className="text-indigo-600 mb-3" size={24} />
-                                <h3 className="font-semibold text-gray-900 mb-1">Response Time</h3>
-                                <p className="text-sm text-gray-600">We typically respond within 24 hours</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Response Time</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">We typically respond within 24 hours</p>
                             </div>
-                            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-slate-700">
                                 <MapPin className="text-indigo-600 mb-3" size={24} />
-                                <h3 className="font-semibold text-gray-900 mb-1">Location</h3>
-                                <p className="text-sm text-gray-600">India 🇮🇳</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">Location</h3>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">India 🇮🇳</p>
                             </div>
                         </motion.div>
 
                         {/* Contact Form */}
                         <motion.form
                             onSubmit={handleSubmit}
-                            className="md:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 p-8"
+                            className="md:col-span-2 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-8"
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
                         >
                             <div className="space-y-5">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
                                     <Input
                                         placeholder="John Doe"
                                         value={form.name}
@@ -86,7 +86,7 @@ const ContactUs = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
                                     <Input
                                         type="email"
                                         placeholder="john@example.com"
@@ -96,13 +96,13 @@ const ContactUs = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
                                     <textarea
                                         rows={5}
                                         placeholder="Tell us how we can help..."
                                         value={form.message}
                                         onChange={(e) => setForm({ ...form, message: e.target.value })}
-                                        className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
+                                        className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-4 py-3 text-gray-900 dark:text-white bg-white dark:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none resize-none"
                                         required
                                     />
                                 </div>

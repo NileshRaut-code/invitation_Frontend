@@ -104,8 +104,8 @@ const MyInvitations = () => {
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">My Invitations</h1>
-                    <p className="text-gray-500 mt-1">Manage and track all your digital invitations</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Invitations</h1>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">Manage and track all your digital invitations</p>
                 </div>
                 <Link to="/dashboard/create">
                     <button className="px-5 py-2.5 rounded-xl text-white font-semibold flex items-center gap-2 hover:scale-105 transition-all shadow-md"
@@ -124,9 +124,9 @@ const MyInvitations = () => {
                     { label: 'Drafts', value: stats.drafts, color: '#d97706' },
                     { label: 'Views', value: stats.views, color: '#ec4899' },
                 ].map(s => (
-                    <div key={s.label} className="p-4 rounded-xl bg-white border border-gray-100">
+                    <div key={s.label} className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700">
                         <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{s.label}</p>
                     </div>
                 ))}
             </div>
@@ -140,7 +140,7 @@ const MyInvitations = () => {
                         placeholder="Search invitations..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                     />
                 </div>
                 <div className="flex gap-2">
@@ -150,7 +150,7 @@ const MyInvitations = () => {
                             onClick={() => setFilterStatus(f)}
                             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${filterStatus === f
                                     ? 'bg-indigo-600 text-white border-indigo-600 shadow-md'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-slate-600 hover:border-indigo-300'
                                 }`}
                         >
                             {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -161,7 +161,7 @@ const MyInvitations = () => {
 
             {/* Invitations List */}
             {filtered.length === 0 ? (
-                <div className="text-center py-20 rounded-2xl bg-white border border-gray-100">
+                <div className="text-center py-20 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700">
                     <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6"
                         style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
                         <Sparkles size={32} className="text-white" />
@@ -169,7 +169,7 @@ const MyInvitations = () => {
                     <h3 className="text-xl font-bold text-gray-900 mb-2">
                         {searchTerm || filterStatus !== 'all' ? 'No matching invitations' : 'No invitations yet'}
                     </h3>
-                    <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                    <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
                         {searchTerm || filterStatus !== 'all'
                             ? 'Try adjusting your search or filter'
                             : 'Create your first digital invitation to get started!'}
@@ -195,7 +195,7 @@ const MyInvitations = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.04 }}
                             >
-                                <div className="p-5 rounded-2xl bg-white border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all group">
+                                <div className="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 hover:shadow-lg hover:border-gray-200 dark:hover:border-slate-600 transition-all group">
                                     <div className="flex flex-col md:flex-row md:items-center gap-4">
                                         {/* Preview Image */}
                                         <div className="w-full md:w-20 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-indigo-50 to-purple-50 border border-gray-100">
@@ -213,7 +213,7 @@ const MyInvitations = () => {
                                         {/* Details */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 mb-1.5">
-                                                <h3 className="font-semibold text-gray-900 truncate group-hover:text-indigo-600 transition-colors">
+                                                <h3 className="font-semibold text-gray-900 dark:text-white truncate group-hover:text-indigo-600 transition-colors">
                                                     {invitation.content?.eventName || 'Untitled Event'}
                                                 </h3>
                                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold flex-shrink-0"
