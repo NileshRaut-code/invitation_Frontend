@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Cookie, Shield, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const CONSENT_KEY = 'im_cookie_consent';
 
@@ -95,12 +94,12 @@ const CookieConsent = () => {
                                     <p className="text-sm leading-relaxed" style={{ color: '#a5b4fc' }}>
                                         We use essential cookies to keep you logged in and make the site work.
                                         Optional cookies help us understand how you use our platform.{' '}
-                                        <Link
-                                            to="/privacy"
+                                        <a
+                                            href="/privacy"
                                             className="underline hover:text-white transition-colors"
                                         >
                                             Privacy Policy
-                                        </Link>
+                                        </a>
                                     </p>
                                 </div>
 
