@@ -271,7 +271,7 @@ const CreateInvitation = () => {
         fieldErrors[name] ? <p className="text-red-500 text-xs mt-1 flex items-center gap-1">⚠ {fieldErrors[name]}</p> : null;
 
     return (
-        <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #faf5ff 100%)' }}>
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-200">
             <div className="max-w-5xl mx-auto px-4 py-8">
                 {/* Header */}
                 <motion.div
@@ -279,8 +279,8 @@ const CreateInvitation = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-8"
                 >
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">{isEditMode ? 'Edit Invitation' : 'Create Invitation'}</h1>
-                    <p className="text-gray-500 mt-1">{isEditMode ? 'Update your invitation details and design' : 'Design your perfect digital invitation in 3 easy steps'}</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">{isEditMode ? 'Edit Invitation' : 'Create Invitation'}</h1>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">{isEditMode ? 'Update your invitation details and design' : 'Design your perfect digital invitation in 3 easy steps'}</p>
                 </motion.div>
 
                 {/* ── Premium Step Indicator ── */}
@@ -313,16 +313,16 @@ const CreateInvitation = () => {
                                     </div>
                                     {/* Step text */}
                                     <div className="hidden sm:block">
-                                        <p className={`text-sm font-semibold leading-tight ${currentStep >= step.id ? 'text-gray-900' : 'text-gray-400'
+                                        <p className={`text-sm font-semibold leading-tight ${currentStep >= step.id ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500'
                                             }`}>
                                             {step.title}
                                         </p>
-                                        <p className="text-xs text-gray-400">{step.desc}</p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500">{step.desc}</p>
                                     </div>
                                 </div>
                                 {/* Connector */}
                                 {index < steps.length - 1 && (
-                                    <div className="flex-1 mx-4 h-0.5 rounded-full bg-gray-200 overflow-hidden">
+                                    <div className="flex-1 mx-4 h-0.5 rounded-full bg-gray-200 dark:bg-slate-700 overflow-hidden">
                                         <motion.div
                                             initial={{ width: '0%' }}
                                             animate={{ width: currentStep > step.id ? '100%' : '0%' }}
@@ -341,25 +341,25 @@ const CreateInvitation = () => {
                     <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
                         {!creationMethod ? (
                             <div>
-                                <h2 className="text-lg font-bold text-gray-800 mb-5">How would you like to start?</h2>
+                                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-5">How would you like to start?</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Template Card */}
                                     <motion.div
                                         whileHover={{ y: -4 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => setCreationMethod('template')}
-                                        className="relative cursor-pointer bg-white rounded-2xl border-2 border-transparent p-8 shadow-sm hover:shadow-xl hover:border-indigo-400 transition-all group overflow-hidden"
+                                        className="relative cursor-pointer bg-white dark:bg-slate-800 rounded-2xl border-2 border-transparent p-8 shadow-sm hover:shadow-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-all group overflow-hidden"
                                     >
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-50 dark:from-indigo-900/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <div className="relative">
-                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-indigo-200 group-hover:scale-110 transition-transform">
+                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-indigo-200 dark:shadow-none group-hover:scale-110 transition-transform">
                                                 <LayoutTemplate size={28} className="text-white" />
                                             </div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-2">Use a Template</h3>
-                                            <p className="text-gray-500 text-sm mb-5">Start with a professionally designed template and customize it to fit your event.</p>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Use a Template</h3>
+                                            <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">Start with a professionally designed template and customize it to fit your event.</p>
                                             <ul className="space-y-2">
                                                 {['Beautiful pre-designed layouts', 'Quick & easy to customize', 'Free & premium options'].map((f, i) => (
-                                                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                                                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                                                         <Check size={14} className="text-indigo-500 flex-shrink-0" /> {f}
                                                     </li>
                                                 ))}
@@ -372,18 +372,18 @@ const CreateInvitation = () => {
                                         whileHover={{ y: -4 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => setCreationMethod('scratch')}
-                                        className="relative cursor-pointer bg-white rounded-2xl border-2 border-transparent p-8 shadow-sm hover:shadow-xl hover:border-purple-400 transition-all group overflow-hidden"
+                                        className="relative cursor-pointer bg-white dark:bg-slate-800 rounded-2xl border-2 border-transparent p-8 shadow-sm hover:shadow-xl hover:border-purple-400 dark:hover:border-purple-500 transition-all group overflow-hidden"
                                     >
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-50 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-50 dark:from-purple-900/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <div className="relative">
-                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform">
+                                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-200 dark:shadow-none group-hover:scale-110 transition-transform">
                                                 <PenTool size={28} className="text-white" />
                                             </div>
-                                            <h3 className="text-xl font-bold text-gray-900 mb-2">Design from Scratch</h3>
-                                            <p className="text-gray-500 text-sm mb-5">Full creative control with our block editor to build something truly unique.</p>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Design from Scratch</h3>
+                                            <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">Full creative control with our block editor to build something truly unique.</p>
                                             <ul className="space-y-2">
                                                 {['Drag-and-drop block editor', 'Complete design freedom', `Starting at ₹${scratchPrice ?? '...'}`].map((f, i) => (
-                                                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                                                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                                                         <Sparkles size={14} className="text-purple-500 flex-shrink-0" /> {f}
                                                     </li>
                                                 ))}
@@ -396,8 +396,8 @@ const CreateInvitation = () => {
                             <div>
                                 <div className="flex items-center justify-between mb-6">
                                     <div>
-                                        <h2 className="text-xl font-bold text-gray-900">Choose a Template</h2>
-                                        <p className="text-sm text-gray-500 mt-0.5">{templates.length} templates available</p>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Choose a Template</h2>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{templates.length} templates available</p>
                                     </div>
                                     <Button variant="outline" size="sm" onClick={() => { setCreationMethod(null); setSelectedTemplate(null); }}>
                                         <ArrowLeft size={16} className="mr-1" /> Change Method
@@ -421,9 +421,9 @@ const CreateInvitation = () => {
                                                 key={template._id}
                                                 whileHover={{ y: -4 }}
                                                 onClick={() => handleSelectTemplate(template)}
-                                                className={`cursor-pointer rounded-2xl overflow-hidden border-2 transition-all bg-white shadow-sm hover:shadow-xl ${selectedTemplate?._id === template._id
-                                                    ? 'border-indigo-500 ring-4 ring-indigo-100 shadow-lg'
-                                                    : 'border-gray-100 hover:border-indigo-200'
+                                                className={`cursor-pointer rounded-2xl overflow-hidden border-2 transition-all bg-white dark:bg-slate-800 shadow-sm hover:shadow-xl ${selectedTemplate?._id === template._id
+                                                    ? 'border-indigo-500 ring-4 ring-indigo-100 dark:ring-indigo-900/30 shadow-lg'
+                                                    : 'border-gray-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-500/50'
                                                     }`}
                                             >
                                                 <div className="aspect-[4/3] relative overflow-hidden group">
@@ -457,7 +457,7 @@ const CreateInvitation = () => {
                                                     )}
                                                 </div>
                                                 <div className="p-3.5">
-                                                    <h3 className="font-semibold text-gray-900 text-sm">{template.name}</h3>
+                                                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm">{template.name}</h3>
                                                     <p className="text-xs text-gray-400 mt-0.5">
                                                         {template.isPremium ? <span className="text-amber-600 font-semibold">₹{template.price}</span> : <span className="text-green-600 font-semibold">Free</span>}
                                                         {template.category && <span className="ml-1.5">· {template.category?.name || template.category}</span>}
@@ -471,13 +471,13 @@ const CreateInvitation = () => {
                         ) : (
                             /* Scratch mode — feature showcase */
                             <div className="max-w-lg mx-auto">
-                                <Card className="p-8 text-center bg-gradient-to-br from-purple-50 to-indigo-50 border-0 shadow-lg">
+                                <Card className="p-8 text-center bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border-0 shadow-lg">
                                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mx-auto mb-5 shadow-lg">
                                         <Wand2 size={28} className="text-white" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Design from Scratch</h2>
-                                    <p className="text-gray-600 mb-1">Create a completely unique invitation with our powerful editor.</p>
-                                    <p className="text-lg font-bold text-indigo-600 mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Design from Scratch</h2>
+                                    <p className="text-gray-600 dark:text-gray-400 mb-1">Create a completely unique invitation with our powerful editor.</p>
+                                    <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-6">
                                         {scratchPrice !== null ? `₹${scratchPrice}` : '...'}
                                         <span className="text-sm font-normal text-gray-400 ml-1">per invitation</span>
                                     </p>
@@ -489,7 +489,7 @@ const CreateInvitation = () => {
                                             { icon: Star, text: 'Premium features' },
                                             { icon: Sparkles, text: 'Animations & effects' },
                                         ].map(({ icon: Icon, text }, i) => (
-                                            <div key={i} className="flex items-center gap-2 bg-white/60 rounded-lg p-2.5 text-sm text-gray-700">
+                                            <div key={i} className="flex items-center gap-2 bg-white/60 dark:bg-slate-700/60 rounded-lg p-2.5 text-sm text-gray-700 dark:text-gray-300">
                                                 <Icon size={16} className="text-purple-500 flex-shrink-0" /> {text}
                                             </div>
                                         ))}
@@ -512,17 +512,17 @@ const CreateInvitation = () => {
                                 <Calendar size={20} className="text-white" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900">Event Details</h2>
-                                <p className="text-sm text-gray-500">Fill in the important details about your event</p>
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">Event Details</h2>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">Fill in the important details about your event</p>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
                             {/* Section: Basic Info */}
-                            <div className="p-6 border-b border-gray-100">
+                            <div className="p-6 border-b border-gray-100 dark:border-slate-700">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Sparkles size={16} className="text-indigo-500" />
-                                    <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wider">Basic Info</h3>
+                                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Basic Info</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
@@ -536,10 +536,10 @@ const CreateInvitation = () => {
                             </div>
 
                             {/* Section: Date & Time */}
-                            <div className="p-6 border-b border-gray-100">
+                            <div className="p-6 border-b border-gray-100 dark:border-slate-700">
                                 <div className="flex items-center gap-2 mb-4">
                                     <Clock size={16} className="text-indigo-500" />
-                                    <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wider">Date & Time</h3>
+                                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Date & Time</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                     <div>
@@ -557,10 +557,10 @@ const CreateInvitation = () => {
                             </div>
 
                             {/* Section: Venue */}
-                            <div className="p-6 border-b border-gray-100">
+                            <div className="p-6 border-b border-gray-100 dark:border-slate-700">
                                 <div className="flex items-center gap-2 mb-4">
                                     <MapPin size={16} className="text-indigo-500" />
-                                    <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wider">Venue</h3>
+                                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Venue</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
@@ -581,7 +581,7 @@ const CreateInvitation = () => {
                             <div className="p-6">
                                 <div className="flex items-center gap-2 mb-4">
                                     <MessageSquare size={16} className="text-indigo-500" />
-                                    <h3 className="text-sm font-semibold text-gray-800 uppercase tracking-wider">Contact & Message</h3>
+                                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-wider">Contact & Message</h3>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                                     <div>
@@ -589,13 +589,13 @@ const CreateInvitation = () => {
                                     </div>
                                     <div /> {/* spacer */}
                                     <div className="md:col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Personal Message</label>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Personal Message</label>
                                         <textarea
                                             name="message"
                                             value={formData.message}
                                             onChange={handleInputChange}
                                             rows={3}
-                                            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm resize-none"
+                                            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm resize-none"
                                             placeholder="Add a personal message to your guests... (optional)"
                                         />
                                     </div>
