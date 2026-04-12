@@ -4,6 +4,14 @@ import { motion } from 'framer-motion';
 import { Star, Crown, Eye, Search, SlidersHorizontal, X } from 'lucide-react';
 import { Card, CardSkeleton, Button, TemplatePreviewModal } from '../components/ui';
 import api from '../api/api';
+import {
+    getCachedTemplates,
+    setCachedTemplates,
+    getCachedCategoryTemplates,
+    setCachedCategoryTemplates,
+    getCachedCategories,
+    setCachedCategories,
+} from '../utils/inviteCache';
 
 const Templates = () => {
     const { categorySlug } = useParams();
@@ -22,17 +30,34 @@ const Templates = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch categories for filter
-                const catRes = await api.get('/public/categories');
-                setCategories(catRes.data);
+                // Fetch categories — check cache first
+                let catData = getCachedCategories();
+                if (!catData) {
+                    const catRes = await api.get('/public/categories');
+                    catData = catRes.data;
+                    setCachedCategories(catData);
+                }
+                setCategories(catData);
 
                 if (categorySlug) {
-                    const { data } = await api.get(`/public/categories/${categorySlug}/templates`);
-                    setCategory(data.category);
-                    setTemplates(data.templates);
+                    // Fetch templates by category — check cache first
+                    let catTemplateData = getCachedCategoryTemplates(categorySlug);
+                    if (!catTemplateData) {
+                        const { data } = await api.get(`/public/categories/${categorySlug}/templates`);
+                        catTemplateData = data;
+                        setCachedCategoryTemplates(categorySlug, catTemplateData);
+                    }
+                    setCategory(catTemplateData.category);
+                    setTemplates(catTemplateData.templates);
                 } else {
-                    const { data } = await api.get('/public/templates');
-                    setTemplates(data);
+                    // Fetch all templates — check cache first
+                    let allTemplates = getCachedTemplates();
+                    if (!allTemplates) {
+                        const { data } = await api.get('/public/templates');
+                        allTemplates = data;
+                        setCachedTemplates(allTemplates);
+                    }
+                    setTemplates(allTemplates);
                 }
             } catch (error) {
                 console.error('Failed to fetch templates:', error);

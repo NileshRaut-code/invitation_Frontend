@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
+import CookieConsent from './components/CookieConsent';
 import './index.css';
 import App from './App.jsx';
 import store from './store/store';
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
           <LanguageProvider>
             <HelmetProvider>
               <App />
+              <CookieConsent />
               <ToastContainer
                 position="bottom-center"
                 autoClose={2500}

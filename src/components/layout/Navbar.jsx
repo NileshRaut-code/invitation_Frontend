@@ -7,6 +7,7 @@ import { logout } from '../../store/slices/authSlice';
 import { toast } from 'react-toastify';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { clearAllCache } from '../../utils/inviteCache';
 import api from '../../api/api';
 
 const Navbar = () => {
@@ -21,10 +22,12 @@ const Navbar = () => {
     const handleLogout = async () => {
         try {
             await api.post('/auth/logout');
+            clearAllCache();
             dispatch(logout());
             toast.success('Logged out successfully');
             navigate('/');
         } catch (error) {
+            clearAllCache();
             dispatch(logout());
             navigate('/');
         }

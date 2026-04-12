@@ -5,6 +5,7 @@ import { Layers, Search, ArrowRight } from 'lucide-react';
 import { Card, CardSkeleton } from '../components/ui';
 import SEO from '../components/SEO';
 import api from '../api/api';
+import { getCachedCategories, setCachedCategories } from '../utils/inviteCache';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
@@ -13,9 +14,18 @@ const Categories = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            // Check cache first — categories rarely change
+            const cached = getCachedCategories();
+            if (cached) {
+                setCategories(cached);
+                setIsLoading(false);
+                return;
+            }
+
             try {
                 const { data } = await api.get('/public/categories');
                 setCategories(data);
+                setCachedCategories(data);
             } catch (error) {
                 console.error('Failed to fetch categories:', error);
             } finally {

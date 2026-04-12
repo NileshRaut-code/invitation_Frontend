@@ -4,6 +4,12 @@ import { Loader } from 'lucide-react';
 import { BlocksRenderer } from '../components/blocks/BlockRenderer';
 import RSVPModal from '../components/invitation/RSVPModal';
 import api from '../api/api';
+import {
+    getCachedInvitation,
+    setCachedInvitation,
+    hasTrackedView,
+    markViewTracked,
+} from '../utils/inviteCache';
 
 const PublicInvitation = () => {
     const { slug } = useParams();
@@ -14,9 +20,24 @@ const PublicInvitation = () => {
 
     useEffect(() => {
         const fetchInvitation = async () => {
+            // 1. Check client-side cache first
+            const cached = getCachedInvitation(slug);
+            if (cached) {
+                setInvitation(cached);
+                setIsLoading(false);
+                // Still track view (deduplicated per session)
+                trackView(slug);
+                return;
+            }
+
+            // 2. Fetch from API if not cached
             try {
                 const { data } = await api.get(`/invitations/public/${slug}`);
                 setInvitation(data);
+                // Cache the response for future visits
+                setCachedInvitation(slug, data);
+                // Track this view
+                trackView(slug);
             } catch (err) {
                 console.error('Failed to load invitation:', err);
                 setError('This invitation is not available or has expired.');
@@ -27,6 +48,14 @@ const PublicInvitation = () => {
 
         fetchInvitation();
     }, [slug]);
+
+    // Track view only once per session per invitation
+    const trackView = (inviteSlug) => {
+        if (hasTrackedView(inviteSlug)) return;
+        markViewTracked(inviteSlug);
+        // Fire-and-forget — don't await, don't block UI
+        api.post(`/invitations/public/${inviteSlug}/view`).catch(() => {});
+    };
 
     if (isLoading) {
         return (
